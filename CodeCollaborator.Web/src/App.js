@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './Collab.css';
 import Collab from './Collab';
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to CodeCollab</h2>
         </div>
-          <Collab id={this.getParameterByName('id')} />
+        <Collab className="Collab" id={this.getParameterByName('id')} />
       </div>
     );
   }

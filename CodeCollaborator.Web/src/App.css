@@ -1,5 +1,24 @@
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
 .App {
   text-align: center;
+  height: 100%;
 }
 
 .App-logo {
