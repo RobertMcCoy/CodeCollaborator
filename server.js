@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
 
 var port = process.env.PORT || 3000;
 var url = require('url');
@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 });
 
 
-app.listen(port, function(){
+app.listen(process.env.PORT, function(){
   console.log('>>>> app listening ' + port);
 });
 
