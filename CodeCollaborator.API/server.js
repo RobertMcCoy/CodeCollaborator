@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
     }
     console.log('Connection resolved for new connection: ' + roomId);
     socket.join(roomId);
-    io.sockets.in(roomId).emit('newConnection', { message: 'Connected to new room: ' + roomId, roomId: roomId });
+    io.sockets.in(roomId).emit('newConnection', { roomId: roomId });
   });
 
   socket.on('codeChange', function (data) {

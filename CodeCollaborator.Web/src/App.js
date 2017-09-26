@@ -11,7 +11,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to CodeCollab</h2>
         </div>
-          <Collab />
+          <Collab id="123321" />
       </div>
     );
   }

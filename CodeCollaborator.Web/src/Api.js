@@ -1,17 +1,14 @@
 import ioClient from 'socket.io-client';
 const socket = ioClient('http://localhost:3000', {'transports': ['websocket', 'polling']});
 
-function subscribeToRoom(cb) {
-    socket.emit('connectToRoom');
-    socket.on('newConnection', code => cb(null, code.roomId));
-}
-
-function getCodeUpdate(cb) {
-    socket.on('codeUpdate', code => cb(null, code.roomId, code.code));
+function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate) {
+    socket.emit('connectToRoom', {roomId: roomId});
+    socket.on('newConnection', code => callbackConnectionInfo(null, code.roomId));
+    socket.on('codeUpdate', code => callbackCodeUpdate(null, code.code));
 }
 
 function submitCodeUpdate(roomId, code) {
     socket.emit('codeChange', { code: code, roomId: roomId });
 }
 
-export { subscribeToRoom, getCodeUpdate, submitCodeUpdate };
+export { subscribeToRoom, submitCodeUpdate };
