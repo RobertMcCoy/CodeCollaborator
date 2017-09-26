@@ -1,25 +1,27 @@
 var express = require('express');
-var path = require('path');
 var app = express();
-var http = require('http').Server(app);
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-
+var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
-var url = require('url');
-const uuidv4 = require('uuid/v4');
 
-app.use('/js', express.static(path.join(__dirname, 'js')));
-
-app.get('/', function (req, res) {
-  res.sendfile('index.html');
-});
+app.use(express.static('js'));
 
 app.listen(process.env.PORT, function(){
   console.log('>>>> app listening ' + port);
 });
 
+
+var url = require('url');
+const uuidv4 = require('uuid/v4');
+
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+
 io.on('connection', function (socket) {
+  io.set('transports', ['websocket']);
 
   socket.on('connectToRoom', function (data) {
     console.log('Resolving for new connection');

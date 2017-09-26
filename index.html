@@ -15,7 +15,7 @@
     }
   </script>
   <script>
-    var socket = io();
+    var socket = io({transports:['websocket']});
     var roomId = getParameterByName('id');
 
     if (roomId == null) {
