@@ -3,11 +3,12 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
+var path = require('path');
 
-app.use(express.static('js'));
+app.use('/js', express.static(path.join(__dirname, 'js')));
 
-app.listen(process.env.PORT, function(){
-  console.log('>>>> app listening ' + port);
+server.listen(port, function () {
+  console.log('Server listening at port %d', port);
 });
 
 
@@ -16,7 +17,7 @@ const uuidv4 = require('uuid/v4');
 
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+  res.sendfile('index.html');
 });
 
 
