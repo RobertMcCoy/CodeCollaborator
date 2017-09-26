@@ -1,13 +1,20 @@
-var url = require('url');
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 var port = process.env.PORT || 3000;
-var server = app.listen(port);
-var io = require('socket.io').listen(server);
+var url = require('url');
 const uuidv4 = require('uuid/v4');
 
 app.get('/', function (req, res) {
   res.sendfile('index.html');
+});
+
+
+app.listen(port, function(){
+  console.log('>>>> app listening ' + port);
 });
 
 io.on('connection', function (socket) {
