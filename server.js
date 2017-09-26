@@ -1,13 +1,16 @@
 var url = require('url');
 var express = require('express');
 var app = express();
-var server = app.listen(3000);
+var server = require('http').createServer(app); 
+var port = process.env.PORT || 3000;
 var io = require('socket.io').listen(server);
 const uuidv4 = require('uuid/v4');
 
 app.get('/', function (req, res) {
   res.sendfile('index.html');
 });
+
+server.listen(port);
 
 io.on('connection', function (socket) {
 
