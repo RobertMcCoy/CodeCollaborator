@@ -21,7 +21,7 @@ io.on('connection', function (socket) {
 
   socket.on('connectToRoom', function (data) {
     console.log('Resolving for new connection');
-    let roomId = "";
+    var roomId = "";
     if (data != null && data.roomId != null) {
       roomId = data.roomId;
     }
