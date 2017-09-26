@@ -33,6 +33,7 @@ io.on('connection', function (socket) {
     if (roomId == "") {
       roomId = uuidv4();
     }
+    console.log('Connection resolved for new connection: ' + roomId);
     socket.join(roomId);
     io.sockets.in(roomId).emit('newConnection', { message: 'Connected to new room: ' + roomId, roomId: roomId });
   });
