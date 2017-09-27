@@ -27,7 +27,8 @@
     "eject": "react-scripts eject"
   },
   "engines": {
-    "node": "~8.5.0 || ~4.2.0"
+    "node": "~8.5.0 || ~4.2.0",
+    "npm": "5.3"
   },
   "proxy": "http://localhost:3000"
 }
