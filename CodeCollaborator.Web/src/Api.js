@@ -1,5 +1,5 @@
 import ioClient from 'socket.io-client';
-const socket = ioClient('http://localhost:3000', {'transports': ['websocket', 'polling']});
+const socket = ioClient(window.location.href, {'transports': ['websocket', 'polling']});
 
 function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate) {
     socket.emit('connectToRoom', {roomId: roomId});
