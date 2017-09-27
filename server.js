@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  io.set('transports', ['websocket']);
+  io.set('transports', ['websocket', 'polling']);
 
   socket.on('connectToRoom', function (data) {
     var roomId = "";
