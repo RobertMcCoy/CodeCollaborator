@@ -10,10 +10,10 @@ server.listen(port);
 var url = require('url');
 const uuidv4 = require('uuid/v4');
 
-app.use(express.static(path.join(__dirname, '/build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/', function (req, res) {
-  res.sendfile(path.join(__dirname+'/build/index.html'));
+  res.sendfile(path.join(__dirname+'client/build/index.html'));
 });
 
 io.on('disconnect', function(socket) {
