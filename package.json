@@ -16,7 +16,8 @@
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "url": "^0.11.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "webpack": "^3.6.0"
   },
   "scripts": {
     "start": "node server.js",
