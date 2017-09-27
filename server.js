@@ -16,8 +16,12 @@ app.get('/', function (req, res) {
   res.sendfile(path.join(__dirname+'/build/index.html'));
 });
 
+io.on('disconnect', function(socket) {
+  socket.emit('disconnect', { id: socket.id });
+});
+
 io.on('connection', function (socket) {
-  io.set('transports', ['websocket']);
+  io.set('transports', ['websocket', 'polling']);
 
   socket.on('connectToRoom', function (data) {
     var roomId = "";
@@ -30,10 +34,6 @@ io.on('connection', function (socket) {
     console.log('Connection resolved for room: ' + roomId);
     socket.join(roomId);
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId });
-  });
-
-  socket.on('unsubscribeFromRoom', function(data) {
-    console.log('Removing a user from: ' + data.roomId);
   });
 
   socket.on('codeChange', function (data) {

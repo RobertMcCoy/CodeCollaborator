@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { subscribeToRoom, submitCodeUpdate, unsubscribeFromRoom } from './Api';
+import { subscribeToRoom, submitCodeUpdate } from './Api';
 
 class Collab extends Component {
     constructor(props) {
@@ -16,15 +16,6 @@ class Collab extends Component {
         submitCodeUpdate(this.state.roomId, event.target.value);
     };
 
-    handleLeave(roomId) {
-        unsubscribeFromRoom(roomId);
-    };
-
-    componentWillUnmount() {
-        this.handleLeave();
-        window.removeEventListener('beforeunload', this.handleLeave)
-    };
-
     componentDidMount() {
         subscribeToRoom(this.state.roomId, (err, roomId) => {
             this.setState({
@@ -35,9 +26,9 @@ class Collab extends Component {
             this.setState({
                 code: code
             });
+        }, (err, socketId) => {
+            console.log('Disconnecting from ' + socketId);
         });
-
-        window.addEventListener('beforeunload', this.handleLeave(this.state.roomId));
     }
 
     render() {
