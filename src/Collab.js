@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { subscribeToRoom, submitCodeUpdate } from './Api';
+import { subscribeToRoom, submitCodeUpdate, unsubscribeFromRoom } from './Api';
 
 class Collab extends Component {
     constructor(props) {
@@ -16,6 +16,15 @@ class Collab extends Component {
         submitCodeUpdate(this.state.roomId, event.target.value);
     };
 
+    handleLeave(roomId) {
+        unsubscribeFromRoom(roomId);
+    };
+
+    componentWillUnmount() {
+        this.handleLeave();
+        window.removeEventListener('beforeunload', this.handleLeave)
+    };
+
     componentDidMount() {
         subscribeToRoom(this.state.roomId, (err, roomId) => {
             this.setState({
@@ -27,6 +36,8 @@ class Collab extends Component {
                 code: code
             });
         });
+
+        window.addEventListener('beforeunload', this.handleLeave(this.state.roomId));
     }
 
     render() {

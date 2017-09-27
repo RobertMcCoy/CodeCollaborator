@@ -11,4 +11,9 @@ function submitCodeUpdate(roomId, code) {
     socket.emit('codeChange', { code: code, roomId: roomId });
 }
 
-export { subscribeToRoom, submitCodeUpdate };
+function unsubscribeFromRoom(roomId) {
+    socket.emit('unsubscribeFromRoom', {roomId: roomId});
+    socket.close();
+}
+
+export { subscribeToRoom, submitCodeUpdate, unsubscribeFromRoom };

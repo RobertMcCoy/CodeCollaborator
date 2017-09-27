@@ -27,9 +27,13 @@ io.on('connection', function (socket) {
     if (roomId == "") {
       roomId = uuidv4();
     }
-    console.log('Connection resolved for new connection: ' + roomId);
+    console.log('Connection resolved for room: ' + roomId);
     socket.join(roomId);
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId });
+  });
+
+  socket.on('unsubscribeFromRoom', function(data) {
+    console.log('A connection has been disconnected from: ' + data.roomId);
   });
 
   socket.on('codeChange', function (data) {
