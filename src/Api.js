@@ -1,5 +1,5 @@
-import ioClient from 'socket.io-client';
-const socket = ioClient(window.location.href, {'transports': ['websocket']});
+import io from 'socket.io-client';
+const socket = io(window.location.href, {'transports': ['websocket', 'polling']});
 
 function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate) {
     socket.emit('connectToRoom', {roomId: roomId});
@@ -13,7 +13,6 @@ function submitCodeUpdate(roomId, code) {
 
 function unsubscribeFromRoom(roomId) {
     socket.emit('unsubscribeFromRoom', {roomId: roomId});
-    socket.close();
 }
 
 export { subscribeToRoom, submitCodeUpdate, unsubscribeFromRoom };

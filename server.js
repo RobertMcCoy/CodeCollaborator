@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  io.set('transports', ['websocket', 'polling']);
+  io.set('transports', ['websocket']);
 
   socket.on('connectToRoom', function (data) {
     var roomId = "";
@@ -33,7 +33,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('unsubscribeFromRoom', function(data) {
-    console.log('A connection has been disconnected from: ' + data.roomId);
+    console.log('Removing a user from: ' + data.roomId);
   });
 
   socket.on('codeChange', function (data) {
