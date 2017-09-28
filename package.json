@@ -12,6 +12,7 @@
     "path": "^0.12.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-scripts": "^1.0.14",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "url": "^0.11.0",
@@ -22,7 +23,7 @@
     "build": "react-scripts build"
   },
   "engines": {
-    "node": "~8.5.0 || ~4.2.0",
+    "node": "~8.6.0 || ~4.2.0",
     "npm": "5.3"
   },
   "proxy": "http://localhost:3000"
