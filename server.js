@@ -16,10 +16,6 @@ app.get('/', function (req, res) {
   res.sendfile(path.join(__dirname + 'build/index.html'));
 });
 
-io.on('disconnect', function (socket) {
-  socket.emit('disconnect', { id: socket.id });
-});
-
 io.on('connection', function (socket) {
   io.set('transports', ['websocket', 'polling']);
 
@@ -37,9 +33,6 @@ io.on('connection', function (socket) {
   });
 
   socket.on('codeChange', function (data) {
-    io.sockets.in(data.roomId).array.foreach(function (element) {
-      if (element.id != data.socketId)
-        element.emit('codeUpdate', data); 
-    });
+    socket.to(data.roomId).emit('codeUpdate', data);
   });
 });
