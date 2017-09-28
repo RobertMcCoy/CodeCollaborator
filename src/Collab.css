@@ -1,4 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+
 textarea {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
     width: 100%;
     height: calc(100% - 150px);
     overflow-y: scroll;
