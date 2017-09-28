@@ -9,7 +9,7 @@ function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate, cal
 }
 
 function submitCodeUpdate(roomId, code) {
-    socket.emit('codeChange', { code: code, roomId: roomId });
+    socket.emit('codeChange', { code: code, roomId: roomId, socketId: socket.id });
 }
 
 export { subscribeToRoom, submitCodeUpdate };

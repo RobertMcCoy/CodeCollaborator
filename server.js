@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
   res.sendfile(path.join(__dirname + 'build/index.html'));
 });
 
-io.on('disconnect', function(socket) {
+io.on('disconnect', function (socket) {
   socket.emit('disconnect', { id: socket.id });
 });
 
@@ -37,7 +37,9 @@ io.on('connection', function (socket) {
   });
 
   socket.on('codeChange', function (data) {
-    console.log('Update to input detected: ' + data.code);
-    io.sockets.in(data.roomId).emit('codeUpdate', data)
+    io.sockets.in(data.roomId).array.foreach(function (element) {
+      if (element.id != data.socketId)
+        element.emit('codeUpdate', data); 
+    });
   });
 });
