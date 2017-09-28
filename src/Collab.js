@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { subscribeToRoom, submitCodeUpdate } from './Api';
+import { subscribeToRoom, submitCodeUpdate, handleDisconnect } from './Api';
+
+var roomId;
 
 class Collab extends Component {
     constructor(props) {
@@ -14,6 +16,9 @@ class Collab extends Component {
 
     handleChange(event) {
         submitCodeUpdate(this.state.roomId, event.target.value);
+        this.setState({
+            code: event.target.value,
+        })
     };
 
     componentDidMount() {
@@ -21,13 +26,12 @@ class Collab extends Component {
             this.setState({
                 roomId: roomId
             });
+            roomId = this.state.roomId;
             window.history.pushState(null, 'Collab', '/?id=' + roomId);
         }, (err, code) => {
             this.setState({
                 code: code
             });
-        }, (err, socketId) => {
-            console.log('Disconnecting from ' + socketId);
         });
     }
 
