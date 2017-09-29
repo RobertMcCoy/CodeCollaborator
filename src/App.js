@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import './Collab.css';
 import Collab from './Collab';
 
 class App extends Component {
