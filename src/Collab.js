@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Collab.css';
 import { subscribeToRoom, submitCodeUpdate, handleDisconnect } from './Api';
 
 var roomId;
