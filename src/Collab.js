@@ -69,7 +69,7 @@ class Collab extends Component {
 
     render() {
         return (
-            <div>
+            <div className="collab-container">
                 <ToastContainer ref={(input) => { this.container = input; }} toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
             </div>
