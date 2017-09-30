@@ -44,7 +44,7 @@ class Collab extends Component {
         subscribeToRoom(this.state.roomId,
             (err, roomId, socketId) => {
                 this.setState({
-                    roomId: roomId,
+                    roomId: roomId
                 });
                 roomId = this.state.roomId;
                 if (this.state.componentSocketId === 0) {
