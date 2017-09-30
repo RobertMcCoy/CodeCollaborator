@@ -29,6 +29,7 @@ io.on('connection', function (socket) {
     if (roomId == "") {
       roomId = uuidv4();
     }
+
     socket.join(roomId);
 
     socketFound = false;
@@ -48,6 +49,13 @@ io.on('connection', function (socket) {
     }
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id });
   });
+
+  socket.on('disconnecting', function() {
+    console.log(socket);
+    for (room in socket.rooms) {
+      socket.to(room).emit('userDisconnected', { socketId: socket.id });
+    }
+  })
 
   socket.on('codeChange', function (data) {
     for (var i = 0; i < connections.length; i++) {
