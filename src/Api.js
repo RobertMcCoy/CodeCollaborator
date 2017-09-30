@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-const socket = io(window.location.protocol + "//" + window.location.hostname + ":" + (process.env.PORT || 3000), {'transports': ['websocket', 'polling']});
+const socket = io(window.location.protocol + "//" + window.location.hostname + ":" + window.location.port, {'transports': ['websocket', 'polling']});
 
 function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate) {
     socket.emit('connectToRoom', { roomId: roomId });

@@ -27,7 +27,6 @@ io.on('connection', function (socket) {
     if (roomId == "") {
       roomId = uuidv4();
     }
-    console.log('Connection resolved for room: ' + roomId);
     socket.join(roomId);
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id });
   });
