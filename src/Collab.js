@@ -20,13 +20,7 @@ class Collab extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(event) {
-        submitCodeUpdate(this.state.roomId, event.target.value);
-        this.setState({
-            code: event.target.value,
-        })
-    };
-
+    
     addNotificationAlert(message) {
         this.container.success(
             message,
@@ -39,39 +33,12 @@ class Collab extends Component {
             }
         );
     }
-
+    
     componentDidMount() {
-        subscribeToRoom(this.state.roomId,
-            (err, roomId, socketId) => {
-                this.setState({
-                    roomId: roomId,
-                });
-                roomId = this.state.roomId;
-                if (this.state.componentSocketId === 0) {
-                    this.setState({
-                        componentSocketId: socketId,
-                    });
-                    this.addNotificationAlert("You joined the page! You are known as: " + socketId);
-                }
-                else {
-                    this.setState(previousState => ({
-                        collaborators: [...previousState, socketId],
-                    }));
-                    this.addNotificationAlert("A new user has connected: " + socketId);
-                }
-                window.history.pushState(null, '', '/?id=' + roomId);
-            }, (err, code) => {
-                this.setState({
-                    code: code
-                });
-            }, (err, socketId) => {
-                console.log('react component has recognized disconnect');
-                var leaverIndex = this.state.collaborators.indexOf(socketId);
-                this.setState({
-                    collaborators: this.state.collaborators.splice(leaverIndex, 1)
-                })
-                this.addNotificationAlert("A user has disconnected: " + socketId);
-            });
+        subscribeToRoom(this.state.roomId, 
+            (err, roomId, socketId) => this.handleConnections(err, roomId, socketId), 
+            (err, code) => this.handleCodeUpdate(err, code), 
+            (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
 
     render() {
@@ -81,6 +48,47 @@ class Collab extends Component {
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
             </div>
         );
+    }
+
+    handleChange(event) {
+        submitCodeUpdate(this.state.roomId, event.target.value);
+        this.setState({
+            code: event.target.value,
+        })
+    };
+
+    handleCodeUpdate(err, code) {
+        this.setState({
+            code: code
+        });
+    }
+
+    handleConnections(err, roomId, socketId) {
+        this.setState({
+            roomId: roomId,
+        });
+        roomId = this.state.roomId;
+        if (this.state.componentSocketId === 0) {
+            this.setState({
+                componentSocketId: socketId,
+            });
+            this.addNotificationAlert("You joined the page! You are known as: " + socketId);
+        }
+        else {
+            this.setState(previousState => ({
+                collaborators: [...previousState, socketId],
+            }));
+            this.addNotificationAlert("A new user has connected: " + socketId);
+        }
+        window.history.pushState(null, '', '/?id=' + roomId);
+    }
+
+    handleDisconnectingUser(err, socketId) {
+        var leaverIndex = this.state.collaborators.indexOf(socketId);
+        this.setState({
+            collaborators: this.state.collaborators.splice(leaverIndex, 1)
+        })
+        this.addNotificationAlert("A user has disconnected: " + socketId);
     }
 }
 
