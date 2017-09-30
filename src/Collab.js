@@ -12,7 +12,7 @@ class Collab extends Component {
         super(props);
         this.state = {
             roomId: this.props.id || "",
-            code: "Begin writing your code here...",
+            code: "",
             collaborators: [],
             componentSocketId: 0,
         };

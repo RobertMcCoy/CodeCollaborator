@@ -51,9 +51,14 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnecting', function() {
-    console.log(socket);
     for (room in socket.rooms) {
       socket.to(room).emit('userDisconnected', { socketId: socket.id });
+      for (var i = 0; i < connections.length; i++) {
+        if (connections[i].roomId == room) {
+          var currentUserLocation = connections[i].currentConnections.indexOf(socket.id);
+          connections[i].currentConnections.splice(currentUserLocation, 1);
+        }
+      }
     }
   })
 
