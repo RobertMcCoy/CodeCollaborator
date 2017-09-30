@@ -10,10 +10,10 @@ server.listen(port);
 var url = require('url');
 const uuidv4 = require('uuid/v4');
 
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, "/../build")));
 
 app.get('/', function (req, res) {
-  res.sendfile(path.join(__dirname + '../build/index.html'));
+  res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 
 io.on('connection', function (socket) {
@@ -27,12 +27,12 @@ io.on('connection', function (socket) {
     if (roomId == "") {
       roomId = uuidv4();
     }
-    console.log('Connection resolved for room: ' + roomId);
     socket.join(roomId);
-    io.sockets.in(roomId).emit('newConnection', { roomId: roomId });
+    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id });
   });
 
   socket.on('codeChange', function (data) {
+    //Using socket.to will not resend to the sending socket
     socket.to(data.roomId).emit('codeUpdate', data);
   });
 });

@@ -7,3 +7,7 @@ textarea {
     height: calc(100% - 150px);
     overflow-y: scroll;
 }
+
+.collab-container {
+    height: 100%;
+}
