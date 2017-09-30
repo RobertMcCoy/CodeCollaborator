@@ -64,6 +64,13 @@ class Collab extends Component {
                 this.setState({
                     code: code
                 });
+            }, (err, socketId) => {
+                console.log('react component has recognized disconnect');
+                var leaverIndex = this.state.collaborators.indexOf(socketId);
+                this.setState({
+                    collaborators: this.state.collaborators.splice(leaverIndex, 1)
+                })
+                this.addNotificationAlert("A user has disconnected: " + socketId);
             });
     }
 
