@@ -26,13 +26,13 @@ io.on('connection', function (socket) {
     if (data != null && data.roomId != null) {
       roomId = data.roomId;
     }
-    if (roomId == "") {
+    if (roomId === "") {
       roomId = uuidv4();
     }
 
     socket.join(roomId);
 
-    socketFound = false;
+    var socketFound = false;
     for (var i = 0; i < connections.length; i++) {
       if (connections[i].roomId === roomId) {
         socketFound = true;
@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnecting', function() {
-    for (room in socket.rooms) {
+    for (var room in socket.rooms) {
       socket.to(room).emit('userDisconnected', { socketId: socket.id });
       for (var i = 0; i < connections.length; i++) {
         if (connections[i].roomId == room) {
