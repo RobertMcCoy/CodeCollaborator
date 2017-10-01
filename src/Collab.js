@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
-import { subscribeToRoom, submitCodeUpdate } from './Api';
+import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -28,6 +28,7 @@ class Collab extends Component {
             collaborators: [],
             code: ''
         })
+        leaveExistingLastRoom();
         subscribeToRoom(newProps.match.params.room,
             (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections), 
             (err, code) => this.handleCodeUpdate(err, code), 

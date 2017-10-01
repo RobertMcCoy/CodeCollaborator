@@ -28,7 +28,6 @@ class App extends Component {
           <Route path='/collab/:room?' component={Collab} />
         </div>
       </Router>
-
     );
   }
 }
