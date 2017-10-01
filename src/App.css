@@ -26,7 +26,7 @@ body {
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: App-logo-spin infinite 60s linear;
   height: 80px;
 }
 
@@ -37,6 +37,7 @@ body {
   width: 350px;
   height: 100%;
   float: left;
+  text-align: center;
 }
 
 .App-intro {
@@ -47,3 +48,52 @@ body {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* End of default styling properties */
+.branding-container {
+
+}
+
+.App-header h2 {
+  padding-bottom: 15px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 2px solid #fff;
+  margin-bottom: 0;
+}
+
+  .App-header > a:hover,
+  .App-header > a:active,
+  .App-header > a:focus {
+    color: #fff;
+    text-decoration: none;
+  }
+
+.header-links {
+  padding: unset;
+  list-style: none;
+  text-align: left;
+  position: relative;
+}
+
+  .header-links li {
+    padding: 10px;
+    width: 100%;
+    position: inherit;
+    border-bottom: 1px solid #fff;
+    background-color: #222;
+    -webkit-transition: background-color .5s ease-out;
+    -moz-transition: background-color .5s ease-out;
+    -o-transition: background-color .5s ease-out;
+    transition: background-color .5s ease-out;
+  }
+
+    .header-links li:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+  .header-links a {
+    color: #fff;
+    text-decoration: none;
+  }

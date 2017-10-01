@@ -10,14 +10,22 @@ class App extends Component {
       <Router>
         <div className="App">
           <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h2>CodeCollab</h2>
-            <ul className="header-link">
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/collab'>New Collab</Link></li>
+            <Link to='/'>
+              <div className="branding-container">
+                <img src={logo} className="App-logo" alt="logo" />
+                <h2>CodeCollab</h2>
+              </div>
+            </Link>
+            <ul className="header-links">
+              <Link to='/'>
+                <li>Home</li>
+              </Link>
+              <Link to='/collab'>
+                <li>New Collab</li>
+              </Link>
             </ul>
-          </div>   
-          <Route path='/collab/:room?' component={ Collab } />
+          </div>
+          <Route path='/collab/:room?' component={Collab} />
         </div>
       </Router>
 
