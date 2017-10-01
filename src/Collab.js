@@ -16,7 +16,7 @@ class Collab extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
     }
-    
+
     addNotificationAlert(message) {
         toast(message);
     }
@@ -30,15 +30,15 @@ class Collab extends Component {
         })
         leaveExistingLastRoom();
         subscribeToRoom(newProps.match.params.room,
-            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections), 
-            (err, code) => this.handleCodeUpdate(err, code), 
+            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
+            (err, code) => this.handleCodeUpdate(err, code),
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
-    
+
     componentDidMount() {
-        subscribeToRoom(this.state.roomId, 
-            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections), 
-            (err, code) => this.handleCodeUpdate(err, code), 
+        subscribeToRoom(this.state.roomId,
+            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
+            (err, code) => this.handleCodeUpdate(err, code),
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
 
@@ -60,11 +60,30 @@ class Collab extends Component {
 
     handleCodeUpdate(err, code) {
         var cursorPosition = $('#codeSpace').prop("selectionStart");
+        var surroundingCharacters = { beginningCharacter: $('#codeSpace').text()[cursorPosition - 1], endingCharacter: $('#codeSpace').text()[cursorPosition] };
         this.setState({
             code: code
         });
-        $('#codeSpace').prop("selectionStart", cursorPosition);
-        $('#codeSpace').prop("selectionEnd", cursorPosition);
+        if (code.length < cursorPosition) {
+            //Code was truncated to be shorter than existing code
+            $('#codeSpace').prop('selectionStart', code.length);
+            $('#codeSpace').prop('selectionEnd', code.length);
+        }
+        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 1] && surroundingCharacters.endingCharacter == code[cursorPosition]) {
+            //Code is in the same spot, don't move it
+            $('#codeSpace').prop("selectionStart", cursorPosition);
+            $('#codeSpace').prop("selectionEnd", cursorPosition);
+        }
+        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 2] && surroundingCharacters.endingCharacter == code[cursorPosition - 1]) {
+            //Code was removed before the caret
+            $('#codeSpace').prop('selectionStart', cursorPosition - 1)
+            $('#codeSpace').prop('selectionEnd', cursorPosition - 1)
+        }
+        else {
+            //Code was added/removed on the caret
+            $('#codeSpace').prop('selectionStart', cursorPosition)
+            $('#codeSpace').prop('selectionEnd', cursorPosition)
+        }
     }
 
     handleConnections(err, roomId, socketId, connections) {
