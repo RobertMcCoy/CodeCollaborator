@@ -2,36 +2,36 @@ import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate } from './Api';
-var ReactToastr = require("react-toastr");
-var {ToastContainer} = ReactToastr; // This is a React Element.
-
-var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 class Collab extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roomId: this.props.id || "",
+            roomId: this.props.match.params.room || "",
             code: "",
             collaborators: [],
             componentSocketId: 0,
         };
-
         this.handleChange = this.handleChange.bind(this);
     }
     
     addNotificationAlert(message) {
-        this.container.success(
-            message,
-            "New Connection",
-            {
-                timeOut: 5000,
-                extendedTimeOut: 2500,
-                closeButton: true,
-                preventDuplicates: true
-            }
-        );
+        toast(message);
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            roomId: newProps.match.params.room,
+            componentSocketId: 0,
+            collaborators: [],
+            code: ''
+        })
+        subscribeToRoom(newProps.match.params.room,
+            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections), 
+            (err, code) => this.handleCodeUpdate(err, code), 
+            (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
     
     componentDidMount() {
@@ -44,7 +44,7 @@ class Collab extends Component {
     render() {
         return (
             <div className="collab-container">
-                <ToastContainer ref={(input) => { this.container = input; }} toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
+                <ToastContainer />
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
             </div>
         );
@@ -67,11 +67,9 @@ class Collab extends Component {
     }
 
     handleConnections(err, roomId, socketId, connections) {
-        console.log(connections);
         this.setState({
             roomId: roomId
         });
-        roomId = this.state.roomId;
         if (this.state.componentSocketId === 0) {
             this.setState({
                 collaborators: [socketId],
@@ -85,7 +83,12 @@ class Collab extends Component {
             }));
             this.addNotificationAlert("A new user has connected: " + socketId);
         }
-        window.history.pushState(null, '', '/?id=' + roomId);
+        if (!window.location.href.includes('/collab/')) {
+            window.history.pushState(null, '', '/collab/' + roomId);
+        }
+        else {
+            window.history.pushState(null, '', roomId);
+        }
     }
 
     handleDisconnectingUser(err, socketId) {

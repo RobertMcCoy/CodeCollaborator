@@ -4,10 +4,12 @@ textarea {
     font-family: 'Roboto Mono', monospace;
     font-size: 18px;
     width: 100%;
-    height: calc(100% - 150px);
+    height: 100%;
     overflow-y: scroll;
 }
 
 .collab-container {
     height: 100%;
+    float: right;
+    width: calc(100% - 350px);
 }
