@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Collab.css';
+import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate } from './Api';
 var ReactToastr = require("react-toastr");
 var {ToastContainer} = ReactToastr; // This is a React Element.
@@ -58,9 +59,12 @@ class Collab extends Component {
     };
 
     handleCodeUpdate(err, code) {
+        var cursorPosition = $('#codeSpace').prop("selectionStart");
         this.setState({
             code: code
         });
+        $('#codeSpace').prop("selectionStart", cursorPosition);
+        $('#codeSpace').prop("selectionEnd", cursorPosition);
     }
 
     handleConnections(err, roomId, socketId) {
