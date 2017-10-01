@@ -33,21 +33,24 @@ io.on('connection', function (socket) {
     socket.join(roomId);
 
     var socketFound = false;
+    var connectionsRoomIndex;
     for (var i = 0; i < connections.length; i++) {
       if (connections[i].roomId === roomId) {
+        connectionsRoomIndex = i;
         socketFound = true;
         connections[i].currentConnections.push(socket.id);
         socket.emit('codeUpdate', { roomId: connections[i].roomId, code: connections[i].currentCode });
       }
     }
     if (!socketFound) {
+      connectionsRoomIndex = 0;
       connections.push({ 
         roomId: roomId, 
         currentConnections: [socket.id],
         currentCode: ""
       });
     }
-    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id });
+    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, connections: connections[connectionsRoomIndex] });
   });
 
   socket.on('disconnecting', function() {

@@ -19,7 +19,6 @@ class Collab extends Component {
 
         this.handleChange = this.handleChange.bind(this);
     }
-
     
     addNotificationAlert(message) {
         this.container.success(
@@ -36,7 +35,7 @@ class Collab extends Component {
     
     componentDidMount() {
         subscribeToRoom(this.state.roomId, 
-            (err, roomId, socketId) => this.handleConnections(err, roomId, socketId), 
+            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections), 
             (err, code) => this.handleCodeUpdate(err, code), 
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
@@ -63,20 +62,22 @@ class Collab extends Component {
         });
     }
 
-    handleConnections(err, roomId, socketId) {
+    handleConnections(err, roomId, socketId, connections) {
+        console.log(connections);
         this.setState({
-            roomId: roomId,
+            roomId: roomId
         });
         roomId = this.state.roomId;
         if (this.state.componentSocketId === 0) {
             this.setState({
+                collaborators: [socketId],
                 componentSocketId: socketId,
             });
             this.addNotificationAlert("You joined the page! You are known as: " + socketId);
         }
         else {
             this.setState(previousState => ({
-                collaborators: [...previousState, socketId],
+                collaborators: connections.currentConnections
             }));
             this.addNotificationAlert("A new user has connected: " + socketId);
         }

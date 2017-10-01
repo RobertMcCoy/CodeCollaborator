@@ -10,7 +10,7 @@ else
 
 function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate, callbackUserDisconnect) {
     socket.emit('connectToRoom', { roomId: roomId });
-    socket.on('newConnection', code => callbackConnectionInfo(null, code.roomId, code.socketId));
+    socket.on('newConnection', code => callbackConnectionInfo(null, code.roomId, code.socketId, code.connections));
     socket.on('codeUpdate', code => callbackCodeUpdate(null, code.code));
     socket.on('userDisconnected', code => callbackUserDisconnect(null, code.socketId));
 }
