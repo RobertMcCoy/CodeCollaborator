@@ -26,28 +26,44 @@ io.on('connection', function (socket) {
     if (data != null && data.roomId != null) {
       roomId = data.roomId;
     }
-    if (roomId == "") {
+    if (roomId === "") {
       roomId = uuidv4();
     }
+
     socket.join(roomId);
 
-    socketFound = false;
+    var socketFound = false;
+    var connectionsRoomIndex;
     for (var i = 0; i < connections.length; i++) {
       if (connections[i].roomId === roomId) {
+        connectionsRoomIndex = i;
         socketFound = true;
         connections[i].currentConnections.push(socket.id);
         socket.emit('codeUpdate', { roomId: connections[i].roomId, code: connections[i].currentCode });
       }
     }
     if (!socketFound) {
+      connectionsRoomIndex = 0;
       connections.push({ 
         roomId: roomId, 
         currentConnections: [socket.id],
         currentCode: ""
       });
     }
-    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id });
+    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, connections: connections[connectionsRoomIndex] });
   });
+
+  socket.on('disconnecting', function() {
+    for (var room in socket.rooms) {
+      socket.to(room).emit('userDisconnected', { socketId: socket.id });
+      for (var i = 0; i < connections.length; i++) {
+        if (connections[i].roomId == room) {
+          var currentUserLocation = connections[i].currentConnections.indexOf(socket.id);
+          connections[i].currentConnections.splice(currentUserLocation, 1);
+        }
+      }
+    }
+  })
 
   socket.on('codeChange', function (data) {
     for (var i = 0; i < connections.length; i++) {

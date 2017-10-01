@@ -1,29 +1,33 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import Collab from './Collab';
 
 class App extends Component {
-
-  getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[[]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to CodeCollab</h2>
+      <Router>
+        <div className="App">
+          <div className="App-header">
+            <Link to='/'>
+              <div className="branding-container">
+                <img src={logo} className="App-logo" alt="logo" />
+                <h2>CodeCollab</h2>
+              </div>
+            </Link>
+            <ul className="header-links">
+              <Link to='/'>
+                <li>Home</li>
+              </Link>
+              <Link to='/collab'>
+                <li>New Collab</li>
+              </Link>
+            </ul>
+          </div>
+          <Route path='/collab/:room?' component={Collab} />
         </div>
-        <Collab className="Collab" id={this.getParameterByName('id')} />
-      </div>
+      </Router>
     );
   }
 }
