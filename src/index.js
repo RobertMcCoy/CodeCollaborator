@@ -5,11 +5,11 @@ import App from './App';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import registerServiceWorker, { unregister } from './registerServiceWorker';
 
+unregister();
 ReactDOM.render(
     <Router>
         <Route path="/" component={App} />
     </Router>,
     document.getElementById('root')
 );
-unregister();
-//registerServiceWorker();
+registerServiceWorker();
