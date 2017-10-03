@@ -8,7 +8,14 @@ import 'react-toastify/dist/ReactToastify.min.css';
 class Collab extends Component {
     constructor(props) {
         super(props);
+
+        let userName;
+        if (this.props.userName == "") {
+            userName = prompt("What will you be known as on the page?");
+        }
+
         this.state = {
+            userName: this.props.userName || userName || "",
             roomId: this.props.match.params.room || "",
             code: "",
             collaborators: [],
@@ -29,7 +36,7 @@ class Collab extends Component {
             code: ''
         })
         leaveExistingLastRoom();
-        subscribeToRoom(newProps.match.params.room,
+        subscribeToRoom(newProps.match.params.room, this.state.userName,
             (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
@@ -40,8 +47,8 @@ class Collab extends Component {
     }
 
     componentDidMount() {
-        subscribeToRoom(this.state.roomId,
-            (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
+        subscribeToRoom(this.state.roomId, this.state.userName,
+            (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
@@ -90,7 +97,7 @@ class Collab extends Component {
         }
     }
 
-    handleConnections(err, roomId, socketId, connections) {
+    handleConnections(err, roomId, socketId, userName, connections) {
         this.setState({
             roomId: roomId
         });
@@ -99,13 +106,13 @@ class Collab extends Component {
                 collaborators: [socketId],
                 componentSocketId: socketId,
             });
-            this.addNotificationAlert("You joined the page! You are known as: " + socketId);
+            this.addNotificationAlert("You joined the page! You are known as: " + userName);
         }
         else {
             this.setState(previousState => ({
                 collaborators: connections.currentConnections
             }));
-            this.addNotificationAlert("A new user has connected: " + socketId);
+            this.addNotificationAlert("A new user has connected: " + userName);
         }
         if (!window.location.href.includes('/collab/')) {
             window.history.pushState(null, '', '/collab/' + roomId);

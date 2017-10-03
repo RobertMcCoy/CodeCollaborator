@@ -6,6 +6,22 @@ import Collab from './Collab';
 import { slide as Menu } from 'react-burger-menu';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: ""
+    }
+
+    this.getName = this.getName.bind(this);
+  }
+
+  getName() {
+    let getUserName = prompt("What name will you go by on the page?");
+    this.setState({
+      userName: getUserName || ""
+    });
+  }
+
   render() {
     return (
       <Router>
@@ -23,12 +39,12 @@ class App extends Component {
                   <div className="menu-item">Home</div>
                 </Link>
                 <Link to='/collab'>
-                  <div className="menu-item">New Collab</div>
+                  <div className="menu-item" onClick={ this.getName }>New Collab</div>
                 </Link>
               </div>
             </Menu>
           </div>
-          <Route path='/collab/:room?' component={Collab} />
+          <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={this.state.userName} />)} />
         </div>
       </Router>
     );
