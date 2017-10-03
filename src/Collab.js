@@ -3,6 +3,7 @@ import './Collab.css';
 import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
+import cookie from 'cookie';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 class Collab extends Component {
