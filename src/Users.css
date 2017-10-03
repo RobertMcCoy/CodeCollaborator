@@ -1,0 +1,12 @@
+.users-container {
+    height: 100%;
+    width: 20%;
+    float:right;
+    text-align: center;
+}
+
+h1.users-header {
+    color: white;
+    text-align: center;
+    
+}
