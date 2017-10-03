@@ -11,7 +11,19 @@ class Collab extends Component {
 
         let userName;
         if (this.props.userName == "") {
-            userName = prompt("What will you be known as on the page?");
+            var isEntryIncorrect = true;
+            while (isEntryIncorrect) {
+                userName = prompt("What will you be known as on the page?");
+                if (typeof(userName) == "string") {
+                    userName = userName.trim();
+                    if (userName !== "") {
+                        isEntryIncorrect = false;
+                    }
+                }
+                if (userName == null) {
+                    isEntryIncorrect = false;
+                }
+            }
         }
 
         this.state = {
