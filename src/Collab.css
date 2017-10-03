@@ -3,9 +3,11 @@
 textarea {
     font-family: 'Roboto Mono', monospace;
     font-size: 18px;
-    width: 100%;
+    width: 80%;
     height: 100%;
     overflow-y: scroll;
+    resize: none;
+    float: left;
 }
 
 .collab-container {
