@@ -2,21 +2,59 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var session = require('express-session');
 var port = process.env.PORT || 3000;
 var path = require('path');
 var helmet = require('helmet');
+const passport = require('passport');
+require('../server/config/passport')(passport);
 
 server.listen(port);
 
 var url = require('url');
 const uuidv4 = require('uuid/v4');
 
-app.use(helmet());
-
 app.use(express.static(path.join(__dirname, "/../build")));
+
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: false }));
+app.use(require('body-parser').json());
+app.use(helmet());
+app.use(function(req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+});
+
+app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + "/../build/index.html"));
+});
+
+app.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/profile',
+  failureRedirect: '/'
+}));
+
+app.post('/signup', passport.authenticate('local-signup', {
+  successRedirect: '/profile',
+  failureRedirect: '/'
+}));
+
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated())
+		return next();
+
+	res.redirect('/');
+};
+
+var models = require("../server/models");
+models.sequelize.sync().then(function() {
+   console.log('Database synced without errors')
+}).catch(function(err) {
+   console.log(err, "Database encountered an error when syncing")
 });
 
 let connections = [];

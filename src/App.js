@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import Collab from './Collab';
+import Register from './Register';
 import { slide as Menu } from 'react-burger-menu';
 
 class App extends Component {
@@ -50,10 +51,14 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
+                <Link to='/register'>
+                  <div className="menu-item">Register</div>
+                </Link>
               </div>
             </Menu>
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
+          <Route path='/register' component={Register} />
         </div>
       </Router>
     );
