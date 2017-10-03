@@ -19,6 +19,13 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 
+var models = require("../server/models");
+models.sequelize.sync().then(function() {
+   console.log('Database synced without errors')
+}).catch(function(err) {
+   console.log(err, "Database encountered an error when syncing")
+});
+
 let connections = [];
 
 io.on('connection', function (socket) {
