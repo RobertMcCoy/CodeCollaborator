@@ -72,7 +72,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
-                <Users />
+                <Users collaborators={this.state.collaborators}/>
             </div>
         );
     }
