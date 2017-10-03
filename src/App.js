@@ -8,18 +8,27 @@ import { slide as Menu } from 'react-burger-menu';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userName: ""
-    }
 
     this.getName = this.getName.bind(this);
   }
 
   getName() {
-    let getUserName = prompt("What name will you go by on the page?");
-    this.setState({
-      userName: getUserName || ""
-    });
+    if (localStorage.userName == undefined) {
+      var isEntryIncorrect = true;
+      while (isEntryIncorrect) {
+        let userName = prompt("What will you be known as on the page?");
+        if (typeof (userName) == "string") {
+          userName = userName.trim();
+          if (userName !== "") {
+            localStorage.userName = userName;
+            isEntryIncorrect = false;
+          }
+        }
+        if (userName == null) {
+          isEntryIncorrect = false;
+        }
+      }
+    }
   }
 
   render() {
@@ -39,12 +48,12 @@ class App extends Component {
                   <div className="menu-item">Home</div>
                 </Link>
                 <Link to='/collab'>
-                  <div className="menu-item" onClick={ this.getName }>New Collab</div>
+                  <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
               </div>
             </Menu>
           </div>
-          <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={this.state.userName} />)} />
+          <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
         </div>
       </Router>
     );

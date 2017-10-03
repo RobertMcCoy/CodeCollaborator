@@ -3,21 +3,21 @@ import './Collab.css';
 import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
-import cookie from 'cookie';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 class Collab extends Component {
     constructor(props) {
         super(props);
-
+        console.log('userName: ' + this.props.userName + ' | local: ' + localStorage.userName);
         let userName;
-        if (this.props.userName == "") {
+        if (this.props.userName == "" && localStorage.userName == undefined) {
             var isEntryIncorrect = true;
             while (isEntryIncorrect) {
                 userName = prompt("What will you be known as on the page?");
                 if (typeof(userName) == "string") {
                     userName = userName.trim();
                     if (userName !== "") {
+                        localStorage.userName = userName;
                         isEntryIncorrect = false;
                     }
                 }
@@ -28,7 +28,7 @@ class Collab extends Component {
         }
 
         this.state = {
-            userName: this.props.userName || userName || "",
+            userName: this.props.userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
             code: "",
             collaborators: [],

@@ -30,7 +30,6 @@
     "ipaddr.js": "^1.5.2",
     "jest": "20.0.4",
     "jquery": "^3.2.1",
-    "localStorage": "^1.0.3",
     "object-assign": "4.1.1",
     "path": "^0.12.7",
     "postcss-flexbugs-fixes": "3.2.0",
