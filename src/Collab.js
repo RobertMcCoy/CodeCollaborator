@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 class Collab extends Component {
     constructor(props) {
         super(props);
-        console.log('userName: ' + this.props.userName + ' | local: ' + localStorage.userName);
+
         let userName;
         if (this.props.userName == "" && localStorage.userName == undefined) {
             var isEntryIncorrect = true;

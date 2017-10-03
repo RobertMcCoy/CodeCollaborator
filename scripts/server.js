@@ -4,11 +4,14 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var path = require('path');
+var helmet = require('helmet');
 
 server.listen(port);
 
 var url = require('url');
 const uuidv4 = require('uuid/v4');
+
+app.use(helmet());
 
 app.use(express.static(path.join(__dirname, "/../build")));
 
