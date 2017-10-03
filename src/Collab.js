@@ -35,6 +35,10 @@ class Collab extends Component {
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
     }
 
+    componentWillUnmount() {
+        leaveExistingLastRoom();
+    }
+
     componentDidMount() {
         subscribeToRoom(this.state.roomId,
             (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
