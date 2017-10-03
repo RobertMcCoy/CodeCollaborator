@@ -11,7 +11,6 @@ class Collab extends Component {
         super(props);
 
         let userName;
-        let users;
         if (this.props.userName == "" && localStorage.userName == undefined) {
             var isEntryIncorrect = true;
             while (isEntryIncorrect) {
