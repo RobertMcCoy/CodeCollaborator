@@ -1,0 +1,24 @@
+h2 {
+    color: #fff;
+    border-bottom: 2px solid #fff;
+}
+
+div {
+    text-align: left;
+}
+
+    div.container {
+        margin-left: 75px;
+        width: 50%;
+        margin: 0 auto;
+    }
+
+    div.form-group {
+        color: #fff;
+        padding-bottom: 15px;
+    }
+
+form {
+    display: relative;
+    width: 100%;
+}
