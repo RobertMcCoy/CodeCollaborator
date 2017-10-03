@@ -2,9 +2,13 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var flash = require('connect-flash');
+var session = require('express-session');
 var port = process.env.PORT || 3000;
 var path = require('path');
 var helmet = require('helmet');
+const passport = require('passport');
+require('../server/config/passport')(passport);
 
 server.listen(port);
 
@@ -13,11 +17,40 @@ const uuidv4 = require('uuid/v4');
 
 app.use(helmet());
 
+app.use(function(req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+});
+
+app.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/profile',
+  failureRedirect: '/login'
+}));
+
+app.post('/signup', passport.authenticate('local-signup', {
+  successRedirect: '/profile',
+  failureRedirect: '/signup'
+}));
+
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 app.use(express.static(path.join(__dirname, "/../build")));
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
+
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated())
+		return next();
+
+	res.redirect('/');
+};
 
 var models = require("../server/models");
 models.sequelize.sync().then(function() {

@@ -1,3 +1,5 @@
+var bcrypt = require('bcrypt-nodejs');
+
 module.exports = function (sequelize, Sequelize) {
     var User = sequelize.define('user', {
         id: {
@@ -33,6 +35,19 @@ module.exports = function (sequelize, Sequelize) {
             type: Sequelize.ENUM('active', 'inactive'),
             defaultValue: 'active'
         }
+    },
+    {
+        classMethods: {
+            generateHash: function (password) {
+                return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+            }
+        },
+        instanceMethods: {
+            validPassword: function (password) {
+                return bcrypt.compareSync(password, this.localpassword);
+            }
+        }
     });
+
     return User;
 }

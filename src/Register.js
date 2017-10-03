@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Register.css';
+import axios from 'axios';
 import validator from 'validator';
 
 class Register extends Component {
@@ -24,8 +25,17 @@ class Register extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
-        console.log(this.state.user);
+        axios.post('http://localhost:3000/signup', {
+            email: this.state.user.email, 
+            username: this.state.user.username, 
+            firstname: this.state.user.firstname, 
+            lastname: this.state.user.lastname, 
+            password: this.state.user.password
+        }).then(function (response) {
+            console.log('resp: ' + response);
+        }).catch(function (error) {
+            console.log('err: ' + error);
+        })
     }
 
     handleForm(event) {
