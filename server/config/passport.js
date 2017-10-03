@@ -17,7 +17,7 @@ if (config.use_env_variable) {
     );
 }
 
-var User = require('../models/User');
+var User = sequelize.import('../models/User');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
@@ -38,36 +38,35 @@ module.exports = function (passport) {
         passReqToCallback: true
     },
         function (req, email, password, done) {
-            User.findOne({ where: { username: username } })
+            User.findOne({ where: { localemail: email } })
                 .then(function (user) {
                     if (!user) {
-                        done(null, false);
+                        done(null, false, req.flash('loginMessage', 'Unknown user'));
                     } else if (!user.validPassword(password)) {
-                        done(null, false);
+                        done(null, false, req.flash('loginMessage', 'Wrong password'));
                     } else {
                         done(null, user);
                     }
                 })
                 .catch(function (e) {
-                    done(null, false);
+                    done(null, false, req.flash('loginMessage', e.name + " " + e.message));
                 });
-        }
-    ));
+        }));
 
     passport.use('local-signup', new LocalStrategy({
-        usernameField: 'username',
+        usernameField: 'email',
         passwordField: 'password',
-        passReqToCallback: false
+        passReqToCallback: true
     },
         function (req, email, password, done) {
-            User.findOne({ where: { email: email } })
+            User.findOne({ where: { localemail: email } })
                 .then(function (existingUser) {
                     if (existingUser)
-                        return done(null, false);
+                        return done(null, false, req.flash('loginMessage', 'That email is already taken.'));
                     if (req.user) {
                         var user = req.user;
-                        user.email = email;
-                        user.password = User.generateHash(password);
+                        user.localemail = email;
+                        user.localpassword = User.generateHash(password);
                         user.save().catch(function (err) {
                             throw err;
                         }).then(function () {
@@ -75,13 +74,13 @@ module.exports = function (passport) {
                         });
                     }
                     else {
-                        var newUser = User.build({ email: email, username: username, firstname: firstname, lastname: lastname, password: User.generateHash(password) });
-                        newUser.save().then(function () { done(null, newUser); }).catch(function (err) { done(null, false); });
+                        var newUser = User.build({ localemail: email, localpassword: User.generateHash(password) });
+                        newUser.save().then(function () { done(null, newUser); }).catch(function (err) { done(null, false, req.flash('loginMessage', err)); });
                     }
                 })
                 .catch(function (e) {
-                    done(null, false);
+                    done(null, false, req.flash('loginMessage', e.name + " " + e.message));
                 })
-        })
-    );
+
+        }));
 };

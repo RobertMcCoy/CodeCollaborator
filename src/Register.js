@@ -25,12 +25,15 @@ class Register extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        axios.post('http://localhost:3000/signup', {
-            email: this.state.user.email, 
-            username: this.state.user.username, 
-            firstname: this.state.user.firstname, 
-            lastname: this.state.user.lastname, 
-            password: this.state.user.password
+        axios({ method: 'post', 
+                url: '/signup', 
+                data: {
+                    email: this.state.user.email, 
+                    username: this.state.user.username, 
+                    firstname: this.state.user.firstname, 
+                    lastname: this.state.user.lastname, 
+                    password: this.state.user.password
+                }
         }).then(function (response) {
             console.log('resp: ' + response);
         }).catch(function (error) {
