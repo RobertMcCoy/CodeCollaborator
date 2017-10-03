@@ -24,7 +24,6 @@ class Register extends Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
         axios({ method: 'post', 
                 url: '/signup', 
                 data: {
@@ -85,7 +84,7 @@ class Register extends Component {
     render() {
         return (
             <div className="container">
-                <form method="post" onSubmit={this.handleSubmit}>
+                <form method="post" action="http://localhost:3000/signup" onSubmit={this.handleSubmit}>
                     <h2>Sign-up for CodeCollaborator</h2>
                     {this.state.errors.unfilledFields && <p>*{this.state.errors.unfilledFields}</p>}                    
                     <div className="form-group">
