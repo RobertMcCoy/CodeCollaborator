@@ -12,12 +12,12 @@ function instantiateSocket() {
     }
 }
 
-function subscribeToRoom(roomId, callbackConnectionInfo, callbackCodeUpdate, callbackUserDisconnect) {
+function subscribeToRoom(roomId, userName, callbackConnectionInfo, callbackCodeUpdate, callbackUserDisconnect) {
     socket.open();
-    socket.emit('connectToRoom', { roomId: roomId });
-    socket.on('newConnection', code => callbackConnectionInfo(null, code.roomId, code.socketId, code.connections));
+    socket.emit('connectToRoom', { roomId: roomId, userName: userName });
+    socket.on('newConnection', code => callbackConnectionInfo(null, code.roomId, code.socketId, code.userName, code.connections));
     socket.on('codeUpdate', code => callbackCodeUpdate(null, code.code));
-    socket.on('userDisconnected', code => callbackUserDisconnect(null, code.socketId));
+    socket.on('userDisconnected', code => callbackUserDisconnect(null, code.userName));
 }
 
 function submitCodeUpdate(roomId, code) {

@@ -4,11 +4,14 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var path = require('path');
+var helmet = require('helmet');
 
 server.listen(port);
 
 var url = require('url');
 const uuidv4 = require('uuid/v4');
+
+app.use(helmet());
 
 app.use(express.static(path.join(__dirname, "/../build")));
 
@@ -38,7 +41,7 @@ io.on('connection', function (socket) {
       if (connections[i].roomId === roomId) {
         connectionsRoomIndex = i;
         socketFound = true;
-        connections[i].currentConnections.push(socket.id);
+        connections[i].currentConnections.push({socketId: socket.id, userName: data.userName});
         socket.emit('codeUpdate', { roomId: connections[i].roomId, code: connections[i].currentCode });
       }
     }
@@ -46,20 +49,24 @@ io.on('connection', function (socket) {
       connectionsRoomIndex = 0;
       connections.push({ 
         roomId: roomId, 
-        currentConnections: [socket.id],
+        currentConnections: [{socketId: socket.id, userName: data.userName}],
         currentCode: ""
       });
     }
-    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, connections: connections[connectionsRoomIndex] });
+    io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, userName: data.userName, connections: connections[connectionsRoomIndex] });
   });
 
   socket.on('disconnecting', function() {
     for (var room in socket.rooms) {
-      socket.to(room).emit('userDisconnected', { socketId: socket.id });
       for (var i = 0; i < connections.length; i++) {
         if (connections[i].roomId == room) {
-          var currentUserLocation = connections[i].currentConnections.indexOf(socket.id);
-          connections[i].currentConnections.splice(currentUserLocation, 1);
+          for (var j = 0; j < connections[i].currentConnections.length; j++) {
+            if (connections[i].currentConnections[j].socketId == socket.id) {
+              socket.to(room).emit('userDisconnected', { socketId: socket.id, userName: connections[i].currentConnections[j].userName });
+              connections[i].currentConnections.splice(j, 1);
+              break;
+            }
+          }
         }
       }
     }
