@@ -37,6 +37,7 @@
     "promise": "8.0.1",
     "qs": "^6.5.1",
     "react": "^16.0.0",
+    "react-burger-menu": "^2.1.6",
     "react-dev-utils": "^4.1.0",
     "react-dom": "^16.0.0",
     "react-router-dom": "^4.2.2",
