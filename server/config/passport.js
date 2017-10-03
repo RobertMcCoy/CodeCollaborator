@@ -1,12 +1,11 @@
 var LocalStrategy = require('passport-local').Strategy;
-var database = require('./config.json')[process.env.NODE_ENV || 'development'];
 var flash = require('connect-flash');
 const Sequelize = require('sequelize');
 var pg = require('pg');
 var path = require('path');
 const env = process.env.NODE_ENV || 'development';
 var pghstore = require('pg-hstore');
-const config = require(`${__dirname}/../config/config.json`)[env];
+const config = require('./config.json')[env];
 
 let sequelize;
 if (config.use_env_variable) {
