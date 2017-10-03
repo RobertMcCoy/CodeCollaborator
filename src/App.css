@@ -23,25 +23,12 @@ body {
 .App {
   text-align: center;
   height: 100%;
+  background-color: #001f3f;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 60s linear;
   height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  padding: 10px;
-  color: white;
-  width: 350px;
-  height: 100%;
-  float: left;
-  text-align: center;
-}
-
-.App-intro {
-  font-size: large;
 }
 
 @keyframes App-logo-spin {
@@ -50,11 +37,7 @@ body {
 }
 
 /* End of default styling properties */
-.branding-container {
-
-}
-
-.App-header h2 {
+.app-header h2 {
   padding-bottom: 15px;
   color: #fff;
   text-decoration: none;
@@ -62,9 +45,9 @@ body {
   margin-bottom: 0;
 }
 
-  .App-header > a:hover,
-  .App-header > a:active,
-  .App-header > a:focus {
+  nav > a:hover,
+  nav > a:active,
+  nav > a:focus {
     color: #fff;
     text-decoration: none;
   }
@@ -76,20 +59,20 @@ body {
   position: relative;
 }
 
-  .header-links li {
+  .header-links a div {
     padding: 10px;
     width: 100%;
     position: inherit;
     border-bottom: 1px solid #fff;
-    background-color: #222;
+    background-color: #001f3f;
     -webkit-transition: background-color .5s ease-out;
     -moz-transition: background-color .5s ease-out;
     -o-transition: background-color .5s ease-out;
     transition: background-color .5s ease-out;
   }
 
-    .header-links li:hover {
-      background-color: #333;
+    .header-links a div:hover {
+      background-color: #001f30;
       cursor: pointer;
     }
 
@@ -97,3 +80,49 @@ body {
     color: #fff;
     text-decoration: none;
   }
+
+/* Burger Menu */
+.bm-burger-button {
+  position: fixed;
+  width: 40px;
+  height: 30px;
+  left: 10px;
+  top: 36px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #fff;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #001f3f;
+  font-size: 1.15em;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #001f3f;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
