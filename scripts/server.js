@@ -55,11 +55,15 @@ io.on('connection', function (socket) {
 
   socket.on('disconnecting', function() {
     for (var room in socket.rooms) {
-      socket.to(room).emit('userDisconnected', { socketId: socket.id });
       for (var i = 0; i < connections.length; i++) {
         if (connections[i].roomId == room) {
-          var currentUserLocation = connections[i].currentConnections.indexOf(socket.id);
-          connections[i].currentConnections.splice(currentUserLocation, 1);
+          for (var j = 0; j < connections[i].currentConnections.length; j++) {
+            if (connections[i].currentConnections[j].socketId == socket.id) {
+              socket.to(room).emit('userDisconnected', { socketId: socket.id, userName: connections[i].currentConnections[j].userName });
+              connections[i].currentConnections.splice(j, 1);
+              break;
+            }
+          }
         }
       }
     }
