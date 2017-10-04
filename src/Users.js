@@ -11,7 +11,6 @@ class Users extends Component {
     }
 
     componentWillReceiveProps (newUsers) {
-        console.log(newUsers);
         if(JSON.stringify(this.state.usersList) !== JSON.stringify(newUsers.collaborators))
         {
             this.setState({
