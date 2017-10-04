@@ -27,7 +27,7 @@ class Users extends Component {
                 <hr/>
                 <ul className="users-list">
                     {this.state.usersList.map(function(user){
-                        return <li>{user}</li>;
+                        return <li>{user.userName}</li>;
                     })}
                 </ul>                
             </div>
