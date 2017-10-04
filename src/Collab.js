@@ -72,7 +72,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
-                <Users />
+                <Users collaborators={this.state.collaborators}/>
             </div>
         );
     }
@@ -118,7 +118,7 @@ class Collab extends Component {
         });
         if (this.state.componentSocketId === 0) {
             this.setState({
-                collaborators: [socketId],
+                collaborators: [{socketId, userName}],
                 componentSocketId: socketId,
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
