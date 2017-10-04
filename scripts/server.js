@@ -20,18 +20,9 @@ app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
 app.use(helmet());
-app.use(function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-});
 
-app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname + "/../build/index.html"));
-});
 
 app.post('/login', passport.authenticate('local-login', {
   successRedirect: '/profile',
@@ -42,6 +33,10 @@ app.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/profile',
   failureRedirect: '/'
 }));
+
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname + "/../build/index.html"));
+});
 
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
