@@ -9,6 +9,7 @@ var helmet = require('helmet');
 const passport = require('passport');
 require('../server/config/passport')(passport);
 
+
 server.listen(port);
 
 var url = require('url');
@@ -20,17 +21,19 @@ app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
 app.use(helmet());
+app.use(require('connect-flash')); // use connect-flash for flash messages stored in session
 
+app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret") })); // session secret
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/profile',
+  successRedirect: '/',
   failureRedirect: '/'
 }));
 
 app.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/profile',
+  successRedirect: '/',
   failureRedirect: '/'
 }));
 

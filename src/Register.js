@@ -26,6 +26,14 @@ class Register extends Component {
     handleSubmit(event) {
         console.log('event submitted');
         //This should validate that the user has entered all information correctloy before firing the submission
+        axios.post('/signup', { email: this.state.user.email, password: this.state.user.password })
+            .then(function() {
+                console.log('form submitted');
+            })
+            .catch(function(err) {
+                console.log('form not submitted - ' + err);
+            })
+        event.preventDefault();
     }
 
     handleForm(event) {
@@ -72,7 +80,7 @@ class Register extends Component {
     render() {
         return (
             <div className="container">
-                <form method="post" action="signup" id="signup" name="signup" onSubmit={this.handleSubmit}>
+                <form id="signup" name="signup" onSubmit={this.handleSubmit}>
                     <h2>Sign-up for CodeCollaborator</h2>
                     {this.state.errors.unfilledFields && <p>*{this.state.errors.unfilledFields}</p>}                    
                     <div className="form-group">
