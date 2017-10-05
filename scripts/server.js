@@ -1,7 +1,5 @@
 var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var app = express.Router();
 var session = require('express-session');
 var port = process.env.PORT || 3000;
 var path = require('path');
@@ -9,23 +7,20 @@ var helmet = require('helmet');
 const passport = require('passport');
 require('../server/config/passport')(passport);
 
-
-server.listen(port);
-
 var url = require('url');
 const uuidv4 = require('uuid/v4');
 
-app.use(express.static(path.join(__dirname, "/../build")));
-
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: false }));
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('body-parser').json());
 app.use(helmet());
-app.use(require('connect-flash')); // use connect-flash for flash messages stored in session
+app.use(require('connect-flash'));
 
-app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret") })); // session secret
+app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: false, resave: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(express.static(path.join(__dirname, "/../build")));
 
 app.post('/login', passport.authenticate('local-login', {
   successRedirect: '/',
@@ -37,7 +32,7 @@ app.post('/signup', passport.authenticate('local-signup', {
   failureRedirect: '/'
 }));
 
-app.get('*', function (req, res) {
+app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 
@@ -49,12 +44,11 @@ function isLoggedIn(req, res, next) {
 };
 
 var models = require("../server/models");
-models.sequelize.sync().then(function() {
-   console.log('Database synced without errors')
-}).catch(function(err) {
-   console.log(err, "Database encountered an error when syncing")
-});
+models.sequelize.sync();
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+server.listen(port);
 let connections = [];
 
 io.on('connection', function (socket) {
@@ -114,7 +108,6 @@ io.on('connection', function (socket) {
         connections[i].currentCode = data.code;
       }
     }
-    //Using socket.to will not resend to the sending socket
     socket.to(data.roomId).emit('codeUpdate', data);
   });
 });
