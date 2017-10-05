@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Register.css';
-import axios from 'axios';
 import $ from 'jquery';
 import validator from 'validator';
 
@@ -29,7 +28,7 @@ class Register extends Component {
         //This should validate that the user has entered all information correctloy before firing the submission
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/signup',
+            url: '/signup',
             data: { 
                 'username': this.state.user.username, 
                 'email': this.state.user.email, 
@@ -37,19 +36,7 @@ class Register extends Component {
                 'firstname': this.state.user.firstname, 
                 'lastname': this.state.user.lastname 
             },
-            success: function(data) {
-                console.log('success registering in ajax');
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        })
-            .done(function (data) {
-                console.log('registering was successful');
-            })
-            .fail(function (jqXhr) {
-                console.log('failed to register');
-            });
+        });
     }
 
     handleForm(event) {
