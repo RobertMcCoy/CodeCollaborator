@@ -118,7 +118,7 @@ class Collab extends Component {
         });
         if (this.state.componentSocketId === 0) {
             this.setState({
-                collaborators: [{socketId, userName}],
+                collaborators: connections.currentConnections,
                 componentSocketId: socketId,
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
