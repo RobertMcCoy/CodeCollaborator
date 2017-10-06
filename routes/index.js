@@ -4,18 +4,18 @@ const passport = require('passport');
 var path = require('path');
 require('../server/config/passport')(passport);
 
-router.post('/login', passport.authenticate('local-login', {
+router.route('/login').post(passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/'
 }), () => (console.log('logged in')));
 
-router.post('/signup', passport.authenticate('local-signup', {
+router.route('/signup').post(passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/'
 }), () => (console.log('registered')));
 
-router.get('/*', function (req, res) {
-  console.log('global route hit');
+router.route('/').get(function (req, res) {
+  console.log('main route hit');
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 

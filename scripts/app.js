@@ -4,6 +4,7 @@ var session = require('express-session');
 var path = require('path');
 var helmet = require('helmet');
 var logger = require('morgan');
+var favicon = require('serve-favicon')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('../routes/index');
@@ -30,9 +31,11 @@ app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, "/../build")));
+app.use('/build', express.static(path.join(__dirname, "/../build")));
 
-app.use('/', routes);
+app.all('/*', routes);
+
+app.listen(process.env.PORT || 3000);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
