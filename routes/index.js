@@ -15,7 +15,7 @@ router.post('/signup', passport.authenticate('local-signup', {
 }), () => (console.log('registered')));
 
 router.get('/*', function (req, res) {
-  console.log('global route identified');
+  console.log('global route hit');
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 

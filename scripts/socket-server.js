@@ -1,6 +1,6 @@
 var app = require('./app');
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
 const uuidv4 = require('uuid/v4');
 
 let connections = [];
