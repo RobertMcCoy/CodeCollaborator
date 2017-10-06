@@ -4,18 +4,16 @@ import './Users.css';
 class Users extends Component {
     constructor(props){
         super(props);
+
         this.state = {
-            usersList: Array.from(props.collaborators)
+            usersList: []
         }
     }
 
     componentWillReceiveProps (newUsers) {
-        if(JSON.stringify(this.state.usersList) !== JSON.stringify(newUsers.collaborators))
-        {
-            this.setState({
-                usersList: Array.from(newUsers.collaborators)
-            })
-        }
+        this.setState({
+            usersList: newUsers.collaborators
+        });
     }
 
     render () {
@@ -24,8 +22,8 @@ class Users extends Component {
                 <h1 className="users-header">Users</h1>
                 <hr/>
                 <ul className="users-list">
-                    {this.state.usersList.map(function(user){
-                        return <li>{user.userName}</li>;
+                    {this.state.usersList.map(function(user, i){
+                        return <li key={ i }>{user.userName}</li>;
                     })}
                 </ul>                
             </div>
