@@ -14,7 +14,8 @@ router.post('/signup', passport.authenticate('local-signup', {
   failureRedirect: '/'
 }), () => (console.log('registered')));
 
-router.get('/', function (req, res) {
+router.get('/*', function (req, res) {
+  console.log('global route hit');
   res.sendFile(path.join(__dirname + "/../build/index.html"));
 });
 
