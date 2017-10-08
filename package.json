@@ -74,10 +74,10 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start": "node scripts/server.js",
+    "start": "node scripts/app.js",
     "build": "node scripts/build.js",
     "start-dev": "node scripts/start.js",
-    "start-server-dev": "nodemon scripts/server.js",
+    "start-server-dev": "nodemon scripts/app.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "engines": {

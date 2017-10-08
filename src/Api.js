@@ -4,12 +4,7 @@ var socket;
 instantiateSocket();
 
 function instantiateSocket() {
-    // if (window.location.port === '3002') {
-        socket = io(window.location.protocol + "//" + window.location.hostname, { 'transports': ['websocket', 'polling'] });
-    // }
-    // else {
-    //     socket = io(window.location.protocol + "//" + window.location.hostname + ":" + (Number(window.location.port) + 1), { 'transports': ['websocket', 'polling'] });
-    // }
+    socket = io(window.location.protocol + "//" + window.location.hostname + (window.location.port + 1), { 'transports': ['websocket', 'polling'] });
 }
 
 function subscribeToRoom(roomId, userName, callbackConnectionInfo, callbackCodeUpdate, callbackUserDisconnect) {

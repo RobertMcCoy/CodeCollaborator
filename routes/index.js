@@ -14,9 +14,4 @@ router.post('/signup', passport.authenticate('local-signup', {
   failureRedirect: '/'
 }), () => (console.log('registered')));
 
-router.get('/*', function (req, res) {
-  console.log('main route hit');
-  res.sendFile(path.join(__dirname + "index.html"));
-});
-
 module.exports = router;

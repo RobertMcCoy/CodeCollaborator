@@ -36,15 +36,15 @@ module.exports = function (passport) {
             User.findOne({ where: { localemail: email } })
                 .then(function (user) {
                     if (!user) {
-                        done(null, false, req.flash('loginMessage', 'Unknown user'));
+                        done(null, false);
                     } else if (!user.validPassword(password)) {
-                        done(null, false, req.flash('loginMessage', 'Wrong password'));
+                        done(null, false);
                     } else {
                         done(null, user);
                     }
                 })
                 .catch(function (e) {
-                    done(null, false, req.flash('loginMessage', e.name + " " + e.message));
+                    done(null, false);
                 });
         }));
 
@@ -61,8 +61,7 @@ module.exports = function (passport) {
                     }
                     if (user) {
                         console.log('User already exists');
-                        return done(null, false,
-                            req.flash('message', 'User Already Exists'));
+                        return done(null, false);
                     } else {
                         var newUser = new User();
                         newUser.username = username;
