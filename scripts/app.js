@@ -31,11 +31,9 @@ app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/build', express.static(path.join(__dirname, "/../build")));
+app.use(express.static(path.join(__dirname, "../build")));
 
 app.all('/*', routes);
-
-app.listen(process.env.PORT || 3000);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
