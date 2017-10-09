@@ -22,7 +22,6 @@ module.exports = function (passport, user) {
 
     });
 
-
     passport.use('local-signup', new LocalStrategy(
         {
             passReqToCallback: true
@@ -33,7 +32,7 @@ module.exports = function (passport, user) {
             };
             User.findOne({ where: { username: username } }).then(function (user) {
                 if (user) {
-                    return done(null, false, { message: 'That email is already taken' });
+                    return done(null, false, { message: 'That username is already taken' });
                 }
                 else {
                     var userPassword = generateHash(password);
@@ -50,6 +49,7 @@ module.exports = function (passport, user) {
                             return done(null, false);
                         }
                         if (newUser) {
+                            newUser.save();
                             return done(null, newUser);
                         }
                     });
@@ -70,7 +70,7 @@ module.exports = function (passport, user) {
             }
             User.findOne({ where: { username: username } }).then(function (user) {
                 if (!user) {
-                    return done(null, false, { message: 'Email does not exist' });
+                    return done(null, false, { message: 'Username does not exist' });
                 }
                 if (!isValidPassword(user.password, password)) {
                     return done(null, false, { message: 'Incorrect password.' });
