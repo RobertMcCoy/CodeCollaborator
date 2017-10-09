@@ -32,12 +32,15 @@ app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('*', express.static(path.join(__dirname, "/../build")));
+app.use('/', express.static(path.join(__dirname, "/../public")));
 
 app.use('/auth', routes);
 
 app.listen(port);
-server.listen(80);
+server.listen(port + 1);
+
+console.log('Server is now active on: ' + port);
+console.log('Socket connection available on: ' + (port + 1));
 
 let connections = [];
 
