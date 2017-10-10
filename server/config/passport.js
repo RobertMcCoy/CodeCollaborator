@@ -52,6 +52,7 @@ module.exports = function (passport) {
         passReqToCallback: true
     },
         function (req, username, password, done) {
+            console.log('entered local-signup method');
             findOrCreateUser = function () {
                 User.findOne({ 'username': username }, function (err, user) {
                     if (err) {

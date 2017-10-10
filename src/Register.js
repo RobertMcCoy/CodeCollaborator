@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Register.css';
-import axios from 'axios';
+import $ from 'jquery';
 import validator from 'validator';
 
 class Register extends Component {
@@ -24,8 +24,19 @@ class Register extends Component {
     }
 
     handleSubmit(event) {
-        console.log('event submitted');
+        event.preventDefault();
         //This should validate that the user has entered all information correctloy before firing the submission
+        $.ajax({
+            type: 'POST',
+            url: '/signup',
+            data: { 
+                'username': this.state.user.username, 
+                'email': this.state.user.email, 
+                'password': this.state.user.password, 
+                'firstname': this.state.user.firstname, 
+                'lastname': this.state.user.lastname 
+            },
+        });
     }
 
     handleForm(event) {
@@ -72,9 +83,9 @@ class Register extends Component {
     render() {
         return (
             <div className="container">
-                <form method="post" action="signup" id="signup" name="signup" onSubmit={this.handleSubmit}>
+                <form id="signup" name="signup" onSubmit={this.handleSubmit} >
                     <h2>Sign-up for CodeCollaborator</h2>
-                    {this.state.errors.unfilledFields && <p>*{this.state.errors.unfilledFields}</p>}                    
+                    {this.state.errors.unfilledFields && <p>*{this.state.errors.unfilledFields}</p>}
                     <div className="form-group">
                         <label htmlFor="email">Email*:</label>
                         <input type="email" className="form-control" name="email" onChange={this.handleForm} value={this.state.user.email} />
@@ -101,7 +112,7 @@ class Register extends Component {
                         <input type="password" className="form-control" name="confirmPassword" onChange={this.handleForm} value={this.state.user.confirmPassword} />
                         {this.state.errors.passwordMismatch && <p>*{this.state.errors.passwordMismatch}</p>}
                     </div>
-                    <input type="submit" className="btn btn-info" />
+                    <input type="submit" value="Register" className="btn btn-info" />
                 </form>
             </div>
         );

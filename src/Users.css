@@ -8,5 +8,10 @@
 h1.users-header {
     color: white;
     text-align: center;
-    
+}
+
+ul.users-list{
+    color:white;
+    font-size: 16px;
+    text-align: left;
 }

@@ -4,11 +4,11 @@ var socket;
 instantiateSocket();
 
 function instantiateSocket() {
-    if (window.location.port == 3001) {
+    if (window.location.port === '3002') {
         socket = io(window.location.protocol + "//" + window.location.hostname + ":3000", { 'transports': ['websocket', 'polling'] });
     }
     else {
-        socket = io(window.location.protocol + "//" + window.location.hostname + ":" + window.location.port, { 'transports': ['websocket', 'polling'] });
+        socket = io(window.location.protocol + "//" + window.location.hostname + ":" + (window.location.port), { 'transports': ['websocket', 'polling'] });
     }
 }
 
