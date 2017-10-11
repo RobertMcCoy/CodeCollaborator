@@ -1,7 +1,7 @@
 .users-container {
-    height: 100%;
-    width: 20%;
-    float:right;
+    min-height: 35%;
+    height: 35%;
+    width: 100%;
     text-align: center;
 }
 
