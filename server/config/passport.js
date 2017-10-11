@@ -1,85 +1,86 @@
+
+//load bcrypt
+var bCrypt = require('bcrypt-nodejs');
+var User = require('../models').User;
 var LocalStrategy = require('passport-local').Strategy;
-var flash = require('connect-flash');
-const Sequelize = require('sequelize');
-var pg = require('pg');
-var path = require('path');
-const env = process.env.NODE_ENV || 'development';
-var pghstore = require('pg-hstore');
-const config = require('./config.json')[env];
 
-let sequelize;
-if (config.use_env_variable) {
-    sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-    sequelize = new Sequelize(
-        config.database, config.username, config.password, config
-    );
-}
-
-var User = sequelize.import('../models/User');
-
-module.exports = function (passport) {
+module.exports = function (passport, user) {
     passport.serializeUser(function (user, done) {
-        done(null, user._id);
+        done(null, user.id);
     });
 
+    // used to deserialize the user
     passport.deserializeUser(function (id, done) {
-        User.findById(id, function (err, user) {
-            done(err, user);
+        User.findById(id).then(function (user) {
+            if (user) {
+                done(null, user.get());
+            }
+            else {
+                done(user.errors, null);
+            }
         });
+
     });
 
-    passport.use('local-login', new LocalStrategy({
-        passReqToCallback: true
-    },
-        function (req, email, password, done) {
-            User.findOne({ where: { localemail: email } })
-                .then(function (user) {
-                    if (!user) {
-                        done(null, false, req.flash('loginMessage', 'Unknown user'));
-                    } else if (!user.validPassword(password)) {
-                        done(null, false, req.flash('loginMessage', 'Wrong password'));
-                    } else {
-                        done(null, user);
-                    }
-                })
-                .catch(function (e) {
-                    done(null, false, req.flash('loginMessage', e.name + " " + e.message));
-                });
-        }));
-
-    passport.use('local-signup', new LocalStrategy({
-        passReqToCallback: true
-    },
+    passport.use('local-signup', new LocalStrategy(
+        {
+            passReqToCallback: true
+        },
         function (req, username, password, done) {
-            console.log('entered local-signup method');
-            findOrCreateUser = function () {
-                User.findOne({ 'username': username }, function (err, user) {
-                    if (err) {
-                        console.log('Error in SignUp: ' + err);
-                        return done(err);
-                    }
-                    if (user) {
-                        console.log('User already exists');
-                        return done(null, false,
-                            req.flash('message', 'User Already Exists'));
-                    } else {
-                        var newUser = new User();
-                        newUser.username = username;
-                        newUser.password = createHash(password);
-                        newUser.email = req.param('email');
-                        newUser.firstname = req.param('firstname');
-                        newUser.lastname = req.param('lastname');
-                        newUser.save(function (err) {
-                            if (err) {
-                                console.log('Error in Saving user: ' + err);
-                                throw err;
-                            }
-                            console.log('User Registration succesful');
-                            return done(null, newUser);
-                        });
-                    }
-                });
+            var generateHash = function (password) {
+                return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
             };
-        }));
-};
+            User.findOne({ where: { username: username } }).then(function (user) {
+                if (user) {
+                    return done(null, false, { message: 'That username is already taken' });
+                }
+                else {
+                    var userPassword = generateHash(password);
+                    var data =
+                        {
+                            username: username,
+                            password: userPassword,
+                            email: req.body.email,
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname
+                        };
+                    User.create(data).then(function (newUser, created) {
+                        if (!newUser) {
+                            return done(null, false);
+                        }
+                        if (newUser) {
+                            newUser.save();
+                            return done(null, newUser);
+                        }
+                    });
+                }
+            });
+        }
+    ));
+
+    //LOCAL SIGNIN
+    passport.use('local-signin', new LocalStrategy(
+        {
+            passReqToCallback: true
+        },
+        function (req, username, password, done) {
+            var User = user;
+            var isValidPassword = function (userpass, password) {
+                return bCrypt.compareSync(password, userpass);
+            }
+            User.findOne({ where: { username: username } }).then(function (user) {
+                if (!user) {
+                    return done(null, false, { message: 'Username does not exist' });
+                }
+                if (!isValidPassword(user.password, password)) {
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+                var userinfo = user.get();
+                return done(null, userinfo);
+            }).catch(function (err) {
+                console.log("Error:", err);
+                return done(null, false, { message: 'Something went wrong with your Signin' });
+            });
+        }
+    ));
+}
