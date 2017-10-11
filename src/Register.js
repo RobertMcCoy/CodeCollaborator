@@ -28,7 +28,7 @@ class Register extends Component {
         //This should validate that the user has entered all information correctloy before firing the submission
         $.ajax({
             type: 'POST',
-            url: '/signup',
+            url: '/auth/signup',
             data: { 
                 'username': this.state.user.username, 
                 'email': this.state.user.email, 
