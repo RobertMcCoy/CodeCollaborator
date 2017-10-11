@@ -32,7 +32,7 @@ app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', express.static(path.join(__dirname, "/../public")));
+app.use('/', express.static(path.join(__dirname, "/../build")));
 
 app.use('/auth', routes);
 
