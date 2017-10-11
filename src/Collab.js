@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
 import Users from './Users'
+import RoomInfo from './RoomInfo'
 import 'react-toastify/dist/ReactToastify.min.css';
 
 class Collab extends Component {
@@ -72,7 +73,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
-                <Users collaborators={this.state.collaborators}/>
+                <RoomInfo collaborators={this.state.collaborators}/>
             </div>
         );
     }

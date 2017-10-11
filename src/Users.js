@@ -6,7 +6,7 @@ class Users extends Component {
         super(props);
 
         this.state = {
-            usersList: []
+            usersList: this.props.collaborators
         }
     }
 
