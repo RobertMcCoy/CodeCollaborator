@@ -1,16 +1,10 @@
 import io from 'socket.io-client';
-
+var port = 3001;
 var socket;
 instantiateSocket();
 
 function instantiateSocket() {
-    var port = window.location.port + 1
-    if (window.location.port == 3000) {
-        socket = io(window.location.protocol + "//" + window.location.hostname + ":3001", { 'transports': ['websocket', 'polling'] });
-    }
-    else {
-        socket = io(window.location.protocol + "//" + window.location.hostname + ":" + port, { 'transports': ['websocket', 'polling'] });
-    }
+    socket = io(window.location.protocol + "//" + window.location.hostname + ":" + port, { 'transports': ['websocket', 'polling'] });
 }
 
 function subscribeToRoom(roomId, userName, callbackConnectionInfo, callbackCodeUpdate, callbackUserDisconnect) {
