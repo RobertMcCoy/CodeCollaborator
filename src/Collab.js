@@ -91,7 +91,6 @@ class Collab extends Component {
     handleCodeUpdate(err, code) {
         var cursorPosition = $('#codeSpace').prop("selectionStart");
         var surroundingCharacters = { beginningCharacter: $('#codeSpace').text()[cursorPosition - 1], endingCharacter: $('#codeSpace').text()[cursorPosition] };
-        console.log(code);
         this.setState({
             code: code
         });
