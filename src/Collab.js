@@ -38,6 +38,7 @@ class Collab extends Component {
             options: {lineNumbers: true, mode: 'javascript'},
             collaborators: [],
             componentSocketId: 0,
+            editor: null
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -69,6 +70,9 @@ class Collab extends Component {
             (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
             (err, socketId) => this.handleDisconnectingUser(err, socketId));
+        this.setState({
+            editor: $('.CodeMirror')[0].CodeMirror
+        })
     }
 
     render() {
@@ -89,34 +93,10 @@ class Collab extends Component {
     };
 
     handleCodeUpdate(err, code) {
-        var cursorPosition = $('#codeSpace').prop("selectionStart");
-        var surroundingCharacters = { beginningCharacter: $('#codeSpace').text()[cursorPosition - 1], endingCharacter: $('#codeSpace').text()[cursorPosition] };
-        console.log(code);
         this.setState({
             code: code
         });
-        var editor = $('.CodeMirror')[0].CodeMirror;
-        editor.getDoc().setValue(this.state.code);
-        if (code.length < cursorPosition) {
-            //Code was truncated to be shorter than existing code
-            $('#codeSpace').prop('selectionStart', code.length);
-            $('#codeSpace').prop('selectionEnd', code.length);
-        }
-        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 1] && surroundingCharacters.endingCharacter == code[cursorPosition]) {
-            //Code is in the same spot, don't move it
-            $('#codeSpace').prop("selectionStart", cursorPosition);
-            $('#codeSpace').prop("selectionEnd", cursorPosition);
-        }
-        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 2] && surroundingCharacters.endingCharacter == code[cursorPosition - 1]) {
-            //Code was removed before the caret
-            $('#codeSpace').prop('selectionStart', cursorPosition - 1)
-            $('#codeSpace').prop('selectionEnd', cursorPosition - 1)
-        }
-        else {
-            //Code was added/removed on the caret
-            $('#codeSpace').prop('selectionStart', cursorPosition)
-            $('#codeSpace').prop('selectionEnd', cursorPosition)
-        }
+        this.state.editor.getDoc().setValue(this.state.code);
     }
 
     handleConnections(err, roomId, socketId, userName, connections) {
