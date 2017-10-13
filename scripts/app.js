@@ -41,15 +41,13 @@ app.get('*', function(req, res) {
 app.use('/auth', routes);
 
 app.listen(port);
-server.listen(3001);
+server.listen(port + 1);
 
 console.log('Server is now active on: ' + port);
 
 let connections = [];
 
 function socketSetup (socket) {
-  io.set('transports', ['websocket', 'polling']);
-
   socket.on('connectToRoom', function (data) {
     var roomId = "";
     if (data != null && data.roomId != null) {
