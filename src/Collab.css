@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
-textarea {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 18px;
-    width: 80%;
-    height: 100%;
-    overflow-y: scroll;
-    resize: none;
-    float: left;
-}
-
 .collab-container {
+    position:relative;
     height: 100%;
     float: right;
     width: calc(100% - 60px);
 }
+
+.ReactCodeMirror {
+    height: 100%;
+    width: 80%;
+    float: left;
+}
+
+.CodeMirror {
+    /* Set height, width, borders, and global font properties here */
+    font-family: 'Roboto Mono', monospace !important;
+    height: 100% !important;
+    width: 100% !important;
+    float:left !important;
+  }

@@ -3,9 +3,11 @@ import './Collab.css';
 import $ from 'jquery';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
-import Users from './Users'
-import RoomInfo from './RoomInfo'
+import RoomInfo from './RoomInfo';
+import CodeMirror from 'react-codemirror';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
 
 class Collab extends Component {
     constructor(props) {
@@ -32,7 +34,8 @@ class Collab extends Component {
         this.state = {
             userName: this.props.userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
-            code: "",
+            code: '',
+            options: {lineNumbers: true, mode: 'javascript'},
             collaborators: [],
             componentSocketId: 0,
         };
@@ -72,25 +75,28 @@ class Collab extends Component {
         return (
             <div className="collab-container">
                 <ToastContainer />
-                <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
+                <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
                 <RoomInfo collaborators={this.state.collaborators}/>
             </div>
         );
     }
 
-    handleChange(event) {
-        submitCodeUpdate(this.state.roomId, event.target.value);
+    handleChange(newCode) {
+        submitCodeUpdate(this.state.roomId, newCode);
         this.setState({
-            code: event.target.value,
+            code: newCode,
         })
     };
 
     handleCodeUpdate(err, code) {
         var cursorPosition = $('#codeSpace').prop("selectionStart");
         var surroundingCharacters = { beginningCharacter: $('#codeSpace').text()[cursorPosition - 1], endingCharacter: $('#codeSpace').text()[cursorPosition] };
+        console.log(code);
         this.setState({
             code: code
         });
+        var editor = $('.CodeMirror')[0].CodeMirror;
+        editor.getDoc().setValue(this.state.code);
         if (code.length < cursorPosition) {
             //Code was truncated to be shorter than existing code
             $('#codeSpace').prop('selectionStart', code.length);
