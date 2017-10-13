@@ -32,7 +32,11 @@ app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', express.static(path.join(__dirname, "/../public")));
+app.use(express.static(path.join(__dirname, "/../build")));
+
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/../build/index.html'));
+});
 
 app.use('/auth', routes);
 
@@ -40,13 +44,10 @@ app.listen(port);
 server.listen(port + 1);
 
 console.log('Server is now active on: ' + port);
-console.log('Socket connection available on: ' + (port + 1));
 
 let connections = [];
 
 function socketSetup (socket) {
-  io.set('transports', ['websocket', 'polling']);
-
   socket.on('connectToRoom', function (data) {
     var roomId = "";
     if (data != null && data.roomId != null) {
