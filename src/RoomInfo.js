@@ -1,41 +1,38 @@
 import React, { Component } from 'react'
 import Users from './Users';
 import './RoomInfo.css';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 class RoomInfo extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            collaborators: this.props.collaborators
+            collaborators: this.props.collaborators,
+            currentMode: this.props.currentMode
         }
     }
 
     componentWillReceiveProps (newProps) {
         this.setState({
-            collaborators: newProps.collaborators
+            collaborators: newProps.collaborators,
+            currentMode: newProps.currentMode
         });
     }
+
 
     render () {
         return (
             <div className="room-info">   
                 <Users collaborators={this.state.collaborators}/>
                 <hr/>
-                <Tabs>
-                    <TabList>
-                        <Tab>Tab 1</Tab>
-                        <Tab>Tab 2</Tab>
-                    </TabList>
-
-                    <TabPanel>
-                        <h2>Ex. Tab 1</h2>
-                    </TabPanel>
-                    <TabPanel>
-                        <h2>Ex. Tab 2</h2>
-                    </TabPanel>               
-                </Tabs>
+                <div className="new-selection">
+                    <h1>Current Selection</h1>
+                    <select value={this.state.currentMode}>
+                        <option value="javascript">JavaScript</option>
+                        <option value="htmlmixed">HTML</option>
+                    </select> 
+                    <button>Confirm Choice</button>
+                </div>
             </div>
         );
     }

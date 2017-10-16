@@ -5,5 +5,19 @@
 }
 
 .react-tabs {
-		margin-top: 20px;
+    margin-top: 20px;
+}
+
+.new-selection h1 {
+    color:white;
+    text-align: center;
+}
+
+.new-selection select {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.new-selection button {
+    margin-left: 10px;
 }

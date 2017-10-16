@@ -8,6 +8,9 @@ import CodeMirror from 'react-codemirror';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/xml/xml';
+
 
 class Collab extends Component {
     constructor(props) {
@@ -35,10 +38,10 @@ class Collab extends Component {
             userName: this.props.userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
             code: '',
-            options: {lineNumbers: true, mode: 'javascript'},
+            options: {lineNumbers: true, mode: ''},
             collaborators: [],
             componentSocketId: 0,
-            editor: null
+            editor: null,
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -80,7 +83,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
-                <RoomInfo collaborators={this.state.collaborators}/>
+                <RoomInfo collaborators={this.state.collaborators} currentMode={this.state.options.mode}/>
             </div>
         );
     }
@@ -107,6 +110,7 @@ class Collab extends Component {
             this.setState({
                 collaborators: connections.currentConnections,
                 componentSocketId: socketId,
+                options: {lineNumbers: true, mode: connections.currentMode}
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
         }
