@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Users from './Users';
+import { submitModeChange } from './Api';
 import './RoomInfo.css';
 
 class RoomInfo extends Component {
@@ -7,6 +8,7 @@ class RoomInfo extends Component {
     constructor(props){
         super(props);
         this.state = {
+            roomId: this.props.roomId,
             collaborators: this.props.collaborators,
             currentMode: this.props.currentMode
         }
@@ -19,7 +21,6 @@ class RoomInfo extends Component {
         });
     }
 
-
     render () {
         return (
             <div className="room-info">   
@@ -27,7 +28,7 @@ class RoomInfo extends Component {
                 <hr/>
                 <div className="new-selection">
                     <h1>Current Selection</h1>
-                    <select value={this.state.currentMode}>
+                    <select value={this.state.currentMode} onChange={this.props.modeChange}>
                         <option value="javascript">JavaScript</option>
                         <option value="htmlmixed">HTML</option>
                     </select> 

@@ -105,6 +105,15 @@ function socketSetup (socket) {
     }
     socket.to(data.roomId).emit('codeUpdate', data);
   });
+
+  socket.on('modeChange', function (data) {
+    for (var i = 0; i < connections.length; i++) {
+      if (connections[i].roomId === data.roomId) {
+        connections[i].currentMode = data.mode;
+      }
+    }
+    socket.in(data.roomId).emit('modeUpdate', data);
+  });
 };
 
 module.exports = app;
