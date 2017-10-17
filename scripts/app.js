@@ -74,7 +74,8 @@ function socketSetup (socket) {
       connections.push({ 
         roomId: roomId, 
         currentConnections: [{socketId: socket.id, userName: data.userName}],
-        currentCode: ""
+        currentCode: "",
+        currentMode: "javascript"
       });
     }
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, userName: data.userName, connections: connections[connectionsRoomIndex] });
