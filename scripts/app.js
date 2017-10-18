@@ -40,8 +40,7 @@ app.get('*', function(req, res) {
 
 app.use('/auth', routes);
 
-app.listen(port);
-server.listen(port + 1);
+server.listen(port);
 
 console.log('Server is now active on: ' + port);
 
