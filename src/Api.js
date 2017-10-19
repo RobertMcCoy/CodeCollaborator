@@ -22,8 +22,6 @@ function submitCodeUpdate(roomId, code) {
 }
 
 function submitModeChange(roomId, mode) {
-    console.log('in submit mode change');
-    console.log('submitcodechange: ' + mode)
     socket.emit('modeChange', {roomId: roomId, mode: mode, socketId: socket.id})
 }
 
