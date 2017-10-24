@@ -4,10 +4,12 @@ var socket;
 instantiateSocket();
 
 function instantiateSocket() {
-    if (window.location.host.indexOf('localhost') >= 0) {
-        socket = io.connect('http://localhost:3000', { 'transports': ['polling', 'websocket'], 'reconnection': true, 'reconnectionDelay': 500, 'reconnectionAttempts': 10 });
-    } else {
-        socket = io.connect({ 'transports': ['polling', 'websocket'], 'reconnection': true, 'reconnectionDelay': 500, 'reconnectionAttempts': 10 });
+    console.log(window.location.host);
+    if (window.location.host === "localhost:3001") {
+        socket = io.connect('http://localhost:3000', { 'transports': ['polling'] });
+    }
+    else {
+        socket = io.connect({ 'transports': ['polling'] });
     }
 }
 

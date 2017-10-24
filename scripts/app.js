@@ -10,16 +10,13 @@ var bodyParser = require('body-parser');
 var routes = require('../routes/index');
 const passport = require('passport');
 require('../server/config/passport')(passport);
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
 const uuidv4 = require('uuid/v4');
 const port = process.env.PORT || 3000;
 
 var models = require("../server/models");
 models.sequelize.sync();
 
-io.on('connection', socketSetup);
-
+app.set('port', port);
 app.set('views', path.join(__dirname, '/../views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
@@ -28,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
-app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: false, resave: false }));
+app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -40,13 +37,19 @@ app.get('*', function(req, res) {
 
 app.use('/auth', routes);
 
-server.listen(port);
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
-console.log('Server is now active on: ' + port);
+io.on('connection', socketSetup);
+
+server.listen(app.get('port'), function() {
+    console.log("Express started on port: " + app.get('port'));
+});
 
 let connections = [];
 
 function socketSetup (socket) {
+  io.set("transports", ["polling"]);
   socket.on('connectToRoom', function (data) {
     var roomId = "";
     if (data != null && data.roomId != null) {
