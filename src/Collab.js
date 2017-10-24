@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
-import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
+import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom, submitModeChange } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
 import RoomInfo from './RoomInfo';
 import CodeMirror from 'react-codemirror';
@@ -44,6 +44,7 @@ class Collab extends Component {
             editor: null,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleModeChange = this.handleModeChange.bind(this);
     }
 
     addNotificationAlert(message) {
@@ -61,7 +62,8 @@ class Collab extends Component {
         subscribeToRoom(newProps.match.params.room, this.state.userName,
             (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId));
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
     }
 
     componentWillUnmount() {
@@ -72,7 +74,8 @@ class Collab extends Component {
         subscribeToRoom(this.state.roomId, this.state.userName,
             (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId));
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
         this.setState({
             editor: $('.CodeMirror')[0].CodeMirror
         })
@@ -83,7 +86,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
-                <RoomInfo collaborators={this.state.collaborators} currentMode={this.state.options.mode}/>
+                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} />
             </div>
         );
     }
@@ -134,6 +137,20 @@ class Collab extends Component {
             collaborators: this.state.collaborators.splice(leaverIndex, 1)
         })
         this.addNotificationAlert("A user has disconnected: " + socketId);
+    }
+
+    handleModeChange(event) {
+        this.setState({
+            options: {lineNumbers: true, mode: event.target.value}
+        })
+        submitModeChange(this.state.roomId, event.target.value);
+    }
+
+    handleModeUpdate(err, mode) {
+        this.setState({
+            options: {lineNumbers: true, mode: mode}
+        });
+        this.addNotificationAlert("Mode has been changed to: " + mode);
     }
 }
 
