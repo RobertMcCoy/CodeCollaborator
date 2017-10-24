@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import Collab from './Collab';
 import Register from './Register';
+import LandingPage from './LandingPage';
 import { slide as Menu } from 'react-burger-menu';
 
 class App extends Component {
@@ -59,6 +60,7 @@ class App extends Component {
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
           <Route path='/register' component={Register} />
+          <LandingPage />
         </div>
       </Router>
     );

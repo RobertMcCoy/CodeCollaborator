@@ -1,0 +1,21 @@
+.landing-page {
+    position:relative;
+    height: 100%;
+    float: right;
+    width: calc(100% - 60px);
+    color: white;
+}
+
+h1, h3 {
+    text-align: center;
+}
+
+.section-head {
+    text-align: left;
+    padding-left: 25px;
+    text-decoration: underline;
+}
+
+.section-info {
+    padding-left: 35px;
+}
