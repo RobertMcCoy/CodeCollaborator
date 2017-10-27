@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import banner from './codeCollabBanner.svg';
+import darkBanner from './codeCollabDarkBanner.svg';
 import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import Collab from './Collab';
@@ -41,8 +42,8 @@ class App extends Component {
             <Menu>
               <Link to='/'>
                 <div className="app-header menu-item">
-                  <img src={logo} className="App-logo" alt="logo" />
-                  <img src={banner} classNAme="Banner-logo" alt="banner"/>
+                  {/*<img src={logo} className="App-logo" alt="logo" />*/}
+                  <img src={banner} className="Banner-logo" alt="banner"/>
                   <hr/>
                 </div>
               </Link>

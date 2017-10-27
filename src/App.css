@@ -37,6 +37,13 @@ body {
 }
 
 /* End of default styling properties */
+.Banner-logo{
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  align-content: absolute;
+}
+
 .app-header h2 {
   padding-bottom: 15px;
   color: #fff;
