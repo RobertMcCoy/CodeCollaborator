@@ -91,6 +91,20 @@ class Collab extends Component {
         );
     }
 
+    getCaretPostition() {
+        var caretPosition = document.getElementById("codeSpace").prop("selectionStart");
+        return caretPosition;
+    }
+
+    markText(text,startOfText,endOfText){
+        var leftPiece = text.subStr(0,startOfText);
+        var highlightChar = text.subStr(startOfText,startOfText+1);
+        var rightPiece = text.subStr(startOfText,endOfText);
+        var finalString = leftPiece + "<mark>" + highlightChar + "</mark>" + rightPiece;
+        return finalString
+    }
+
+
     handleChange(newCode) {
         submitCodeUpdate(this.state.roomId, newCode);
         this.setState({
