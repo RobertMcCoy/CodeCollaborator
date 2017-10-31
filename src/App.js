@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import Collab from './Collab';
 import Register from './Register';
+import Login from './Login';
 import { slide as Menu } from 'react-burger-menu';
 
 class App extends Component {
@@ -54,11 +55,15 @@ class App extends Component {
                 <Link to='/register'>
                   <div className="menu-item">Register</div>
                 </Link>
+                <Link to='/login'>
+                  <div className="menu-item">Login</div>
+                </Link>
               </div>
             </Menu>
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
           <Route path='/register' component={Register} />
+          <Route path='/login' component={Login} />          
         </div>
       </Router>
     );
