@@ -6,6 +6,13 @@
     color: white;
 }
 
+img {
+    display: block;
+    margin: 0 auto;
+    max-height: 50%;
+    max-width: 50%;
+}
+
 h1, h3 {
     text-align: center;
 }
@@ -18,4 +25,10 @@ h1, h3 {
 
 .section-info {
     padding-left: 35px;
+}
+
+.dev-section {
+    width: calc(36% - 60px);
+    display: inline-block;
+    text-align: center;
 }
