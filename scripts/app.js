@@ -1,29 +1,55 @@
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+var session = require('express-session');
 var path = require('path');
 var helmet = require('helmet');
-
-server.listen(port);
-
-var url = require('url');
+var logger = require('morgan');
+var favicon = require('serve-favicon')
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var routes = require('../routes/index');
+const passport = require('passport');
+require('../server/config/passport')(passport);
 const uuidv4 = require('uuid/v4');
+const port = process.env.PORT || 3000;
 
+var models = require("../server/models");
+models.sequelize.sync();
+
+app.set('port', port);
+app.set('views', path.join(__dirname, '/../views'));
+app.set('view engine', 'jade');
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(helmet());
+
+app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: true, resave: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, "/../build")));
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname + "/../build/index.html"));
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/../build/index.html'));
+});
+
+app.use('/auth', routes);
+
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
+io.on('connection', socketSetup);
+
+server.listen(app.get('port'), function() {
+    console.log("Express started on port: " + app.get('port'));
 });
 
 let connections = [];
 
-io.on('connection', function (socket) {
-  io.set('transports', ['websocket', 'polling']);
-
+function socketSetup (socket) {
+  io.set("transports", ["polling"]);
   socket.on('connectToRoom', function (data) {
     var roomId = "";
     if (data != null && data.roomId != null) {
@@ -50,7 +76,8 @@ io.on('connection', function (socket) {
       connections.push({ 
         roomId: roomId, 
         currentConnections: [{socketId: socket.id, userName: data.userName}],
-        currentCode: ""
+        currentCode: "",
+        currentMode: "javascript"
       });
     }
     io.sockets.in(roomId).emit('newConnection', { roomId: roomId, socketId: socket.id, userName: data.userName, connections: connections[connectionsRoomIndex] });
@@ -78,7 +105,17 @@ io.on('connection', function (socket) {
         connections[i].currentCode = data.code;
       }
     }
-    //Using socket.to will not resend to the sending socket
     socket.to(data.roomId).emit('codeUpdate', data);
   });
-});
+
+  socket.on('modeChange', function (data) {
+    for (var i = 0; i < connections.length; i++) {
+      if (connections[i].roomId === data.roomId) {
+        connections[i].currentMode = data.mode;
+      }
+    }
+    socket.in(data.roomId).emit('modeUpdate', data);
+  });
+};
+
+module.exports = app;

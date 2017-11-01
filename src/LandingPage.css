@@ -1,0 +1,34 @@
+.landing-page {
+    position:relative;
+    height: 100%;
+    float: right;
+    width: calc(100% - 60px);
+    color: white;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+    max-height: 50%;
+    max-width: 50%;
+}
+
+h1, h3 {
+    text-align: center;
+}
+
+.section-head {
+    text-align: left;
+    padding-left: 25px;
+    text-decoration: underline;
+}
+
+.section-info {
+    padding-left: 35px;
+}
+
+.dev-section {
+    width: calc(36% - 60px);
+    display: inline-block;
+    text-align: center;
+}

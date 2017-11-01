@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
-import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom } from './Api';
+import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom, submitModeChange } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
+import RoomInfo from './RoomInfo';
+import CodeMirror from 'react-codemirror';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/xml/xml';
+
 
 class Collab extends Component {
     constructor(props) {
         super(props);
-
         let userName;
-        if (this.props.userName == "" && localStorage.userName == undefined) {
+        if (localStorage.userName === undefined && this.props.userName === undefined) {
             var isEntryIncorrect = true;
             while (isEntryIncorrect) {
                 userName = prompt("What will you be known as on the page?");
-                if (typeof(userName) == "string") {
+                if (typeof(userName) === "string") {
                     userName = userName.trim();
                     if (userName !== "") {
                         localStorage.userName = userName;
@@ -30,11 +36,14 @@ class Collab extends Component {
         this.state = {
             userName: this.props.userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
-            code: "",
+            code: '',
+            options: {lineNumbers: true, mode: ''},
             collaborators: [],
             componentSocketId: 0,
+            editor: null,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleModeChange = this.handleModeChange.bind(this);
     }
 
     addNotificationAlert(message) {
@@ -52,7 +61,8 @@ class Collab extends Component {
         subscribeToRoom(newProps.match.params.room, this.state.userName,
             (err, roomId, socketId, connections) => this.handleConnections(err, roomId, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId));
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
     }
 
     componentWillUnmount() {
@@ -63,51 +73,35 @@ class Collab extends Component {
         subscribeToRoom(this.state.roomId, this.state.userName,
             (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
             (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId));
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
+        this.setState({
+            editor: $('.CodeMirror')[0].CodeMirror
+        })
     }
 
     render() {
         return (
             <div className="collab-container">
                 <ToastContainer />
-                <textarea name="code" id="codeSpace" value={this.state.code} cols="30" rows="10" onChange={this.handleChange} />
+                <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
+                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} />
             </div>
         );
     }
 
-    handleChange(event) {
-        submitCodeUpdate(this.state.roomId, event.target.value);
+    handleChange(newCode) {
+        submitCodeUpdate(this.state.roomId, newCode);
         this.setState({
-            code: event.target.value,
+            code: newCode,
         })
     };
 
     handleCodeUpdate(err, code) {
-        var cursorPosition = $('#codeSpace').prop("selectionStart");
-        var surroundingCharacters = { beginningCharacter: $('#codeSpace').text()[cursorPosition - 1], endingCharacter: $('#codeSpace').text()[cursorPosition] };
         this.setState({
             code: code
         });
-        if (code.length < cursorPosition) {
-            //Code was truncated to be shorter than existing code
-            $('#codeSpace').prop('selectionStart', code.length);
-            $('#codeSpace').prop('selectionEnd', code.length);
-        }
-        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 1] && surroundingCharacters.endingCharacter == code[cursorPosition]) {
-            //Code is in the same spot, don't move it
-            $('#codeSpace').prop("selectionStart", cursorPosition);
-            $('#codeSpace').prop("selectionEnd", cursorPosition);
-        }
-        else if (surroundingCharacters.beginningCharacter == code[cursorPosition - 2] && surroundingCharacters.endingCharacter == code[cursorPosition - 1]) {
-            //Code was removed before the caret
-            $('#codeSpace').prop('selectionStart', cursorPosition - 1)
-            $('#codeSpace').prop('selectionEnd', cursorPosition - 1)
-        }
-        else {
-            //Code was added/removed on the caret
-            $('#codeSpace').prop('selectionStart', cursorPosition)
-            $('#codeSpace').prop('selectionEnd', cursorPosition)
-        }
+        this.state.editor.getDoc().setValue(this.state.code);
     }
 
     handleConnections(err, roomId, socketId, userName, connections) {
@@ -116,8 +110,9 @@ class Collab extends Component {
         });
         if (this.state.componentSocketId === 0) {
             this.setState({
-                collaborators: [socketId],
+                collaborators: connections.currentConnections,
                 componentSocketId: socketId,
+                options: {lineNumbers: true, mode: connections.currentMode}
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
         }
@@ -141,6 +136,20 @@ class Collab extends Component {
             collaborators: this.state.collaborators.splice(leaverIndex, 1)
         })
         this.addNotificationAlert("A user has disconnected: " + socketId);
+    }
+
+    handleModeChange(event) {
+        this.setState({
+            options: {lineNumbers: true, mode: event.target.value}
+        })
+        submitModeChange(this.state.roomId, event.target.value);
+    }
+
+    handleModeUpdate(err, mode) {
+        this.setState({
+            options: {lineNumbers: true, mode: mode}
+        });
+        this.addNotificationAlert("Mode has been changed to: " + mode);
     }
 }
 
