@@ -42,17 +42,16 @@ class Register extends Component {
     handleForm(event) {
         const field = event.target.name;
         const user = this.state.user;
+        var currentErrors = this.state.errors;
         user[field] = event.target.value;
         if (field === "email") {
             if (!validator.isEmail(event.target.value)) {
-                var currentErrors = this.state.errors;
                 currentErrors.emailError = "Email must be a valid address!";
                 this.setState({
                     errors: currentErrors
                 })
             }
             else {
-                var currentErrors = this.state.errors;
                 currentErrors.emailError = "";
                 this.setState({
                     errors: currentErrors
@@ -61,14 +60,12 @@ class Register extends Component {
         }
         if (field === "password" || field === "confirmPassword") {
             if (user.password !== user.confirmPassword) {
-                var currentErrors = this.state.errors;
                 currentErrors.passwordMismatch = "Passwords must match!";
                 this.setState({
                     errors: currentErrors
                 })
             }
             else {
-                var currentErrors = this.state.errors;
                 currentErrors.passwordMismatch = "";
                 this.setState({
                     errors: currentErrors

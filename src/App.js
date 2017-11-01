@@ -10,16 +10,15 @@ import { slide as Menu } from 'react-burger-menu';
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.getName = this.getName.bind(this);
   }
 
   getName() {
-    if (localStorage.userName == undefined) {
+    if (localStorage.userName === undefined) {
       var isEntryIncorrect = true;
       while (isEntryIncorrect) {
         let userName = prompt("What will you be known as on the page?");
-        if (typeof (userName) == "string") {
+        if (typeof(userName) === "string") {
           userName = userName.trim();
           if (userName !== "") {
             localStorage.userName = userName;
@@ -60,7 +59,7 @@ class App extends Component {
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
           <Route path='/register' component={Register} />
-          <LandingPage />
+          <Route path='/' component={LandingPage} />
         </div>
       </Router>
     );
