@@ -63,7 +63,7 @@ class App extends Component {
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
           <Route path='/register' component={Register} />
-          <Route path='/' component={LandingPage} />
+          <Route exact path='/' component={LandingPage} />
           <Route path='/login' component={Login} />
         </div>
       </Router>
