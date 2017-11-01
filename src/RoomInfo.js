@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Users from './Users';
-import { submitModeChange } from './Api';
 import './RoomInfo.css';
 
 class RoomInfo extends Component {

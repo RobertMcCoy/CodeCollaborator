@@ -15,13 +15,12 @@ import 'codemirror/mode/xml/xml';
 class Collab extends Component {
     constructor(props) {
         super(props);
-
         let userName;
-        if (this.props.userName == "" && localStorage.userName == undefined) {
+        if (localStorage.userName === undefined && this.props.userName === undefined) {
             var isEntryIncorrect = true;
             while (isEntryIncorrect) {
                 userName = prompt("What will you be known as on the page?");
-                if (typeof(userName) == "string") {
+                if (typeof(userName) === "string") {
                     userName = userName.trim();
                     if (userName !== "") {
                         localStorage.userName = userName;
