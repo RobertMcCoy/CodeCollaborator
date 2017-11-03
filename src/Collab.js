@@ -42,6 +42,7 @@ class Collab extends Component {
             collaborators: [],
             componentSocketId: 0,
             editor: null,
+            highlightColors: ['red','green','blue','purple','orange','pink']
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
@@ -83,6 +84,7 @@ class Collab extends Component {
 
     render() {
         return (
+            <div className="highligh-div"></div>
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
@@ -92,18 +94,40 @@ class Collab extends Component {
     }
 
     getCaretPostition() {
-        var caretPosition = document.getElementById("codeSpace").prop("selectionStart");
+        let caretPosition = document.getElementById("codeSpace").prop("selectionStart");
         return caretPosition;
     }
 
     markText(text,startOfText,endOfText){
-        var leftPiece = text.subStr(0,startOfText);
-        var highlightChar = text.subStr(startOfText,startOfText+1);
-        var rightPiece = text.subStr(startOfText,endOfText);
-        var finalString = leftPiece + "<mark>" + highlightChar + "</mark>" + rightPiece;
+        let leftPiece = text.subStr(0,startOfText);
+        let highlightChar = text.subStr(startOfText,startOfText+1);
+        let rightPiece = text.subStr(startOfText,endOfText);
+        let finalString = leftPiece + "<mark class=\""+ this.props.userName +"\">" + highlightChar + "</mark>" + rightPiece;
         return finalString
     }
 
+    unMarkText(text){
+        let finalString = text;
+        finalString.replace(/^<mark*$>/ ,''); //replace mark tags with blank text
+        finalString.replace(/^<\/mark$>/ ,''); 
+
+        /*let leftPiece = text.substring(0,text.indexOf("<mark"));//left of the <mark>
+        let rightPiece = text.substring(text.indexOf("</mark>")+7, text.length);//right of the </mark>
+        let markedPiece = text.substring(text.indexOf("<mark")+7,text.indexOf("</mark>"));//the <mark> itself
+        let unMarkedPiece = markedPiece.substrning(0,markedPiece.length-7);//strip the <mark> tags of
+
+        let finalString = leftPiece + unMarkedPiece + rightPiece;
+        */
+        return finalString;
+    }
+
+    handleMarkChange(newCode){
+        submitCodeUpdate(this.state.roomId, newCode);
+        this.setState({
+            code: newCode,
+            
+        })
+    }
 
     handleChange(newCode) {
         submitCodeUpdate(this.state.roomId, newCode);
