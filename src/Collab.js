@@ -82,10 +82,18 @@ class Collab extends Component {
         })
     }
 
+    highlightsContainer(){
+        return(
+            <div className="highlights">
+                <getCaretPosition/>
+            </div>
+        )
+    }
+
     render() {
         return (
-            <div className="highligh-div"></div>
             <div className="collab-container">
+                <highlightsContainer />
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
                 <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} />
@@ -108,16 +116,8 @@ class Collab extends Component {
 
     unMarkText(text){
         let finalString = text;
-        finalString.replace(/^<mark*$>/ ,''); //replace mark tags with blank text
-        finalString.replace(/^<\/mark$>/ ,''); 
-
-        /*let leftPiece = text.substring(0,text.indexOf("<mark"));//left of the <mark>
-        let rightPiece = text.substring(text.indexOf("</mark>")+7, text.length);//right of the </mark>
-        let markedPiece = text.substring(text.indexOf("<mark")+7,text.indexOf("</mark>"));//the <mark> itself
-        let unMarkedPiece = markedPiece.substrning(0,markedPiece.length-7);//strip the <mark> tags of
-
-        let finalString = leftPiece + unMarkedPiece + rightPiece;
-        */
+        finalString.replace(/^<mark*$>/ ,''); //replace <mark> tags with blank text
+        finalString.replace(/^<\/mark$>/ ,'');
         return finalString;
     }
 
