@@ -13,10 +13,10 @@
     float: left;
 }
 
-.CodeMirror {
-    /* Set height, width, borders, and global font properties here */
-    font-family: 'Roboto Mono', monospace !important;
-    height: 100% !important;
-    width: 100% !important;
-    float:left !important;
+.ReactCodeMirror .CodeMirror {
+    font-family: 'Roboto Mono', monospace;
+    height: 100%;
+    width: 100%;
+    float: left;
+    z-index: 0;
   }

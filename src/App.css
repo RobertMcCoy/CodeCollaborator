@@ -110,6 +110,7 @@ body {
 .bm-menu {
   background: #001f3f;
   font-size: 1.15em;
+  z-index: 999;
 }
 
 /* Morph shape necessary with bubble or elastic */
