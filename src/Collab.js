@@ -37,7 +37,7 @@ class Collab extends Component {
             userName: this.props.userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
             code: '',
-            options: {lineNumbers: true, mode: ''},
+            options: {lineNumbers: true, mode: '', lineWrapping: false},
             collaborators: [],
             componentSocketId: 0,
             editor: null,
@@ -150,6 +150,13 @@ class Collab extends Component {
             options: {lineNumbers: true, mode: mode}
         });
         this.addNotificationAlert("Mode has been changed to: " + mode);
+    }
+
+    handleLineWrap(size) {
+        this.setState({
+            options: {lineNumbers: true, mode: this.mode, lineWrapping: true}
+        });
+        this.addNotificationAlert("Line-Wrapping has been set to: "+ this.lineWrapping);
     }
 }
 

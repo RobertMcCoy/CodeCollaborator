@@ -4,11 +4,15 @@
     float: right;
 }
 
+.whiteText {
+    color:white;
+}
+
 .react-tabs {
     margin-top: 20px;
 }
 
-.new-selection .whiteText h1 {
+.new-selection h1 {
     color:white;
     text-align: center;
 }
