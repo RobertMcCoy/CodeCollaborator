@@ -1,0 +1,28 @@
+.users-page {
+    position: relative;
+    float: right;
+    width: calc(100% - 60px);
+    color: white;    
+    text-align: center;
+    
+}
+
+.name {
+    height: 100%;
+    font-size: 64px;
+}
+
+.reset-pass {
+    align-content: center;
+    color: black;
+}
+
+.change-pass {
+    text-align: center;
+}
+.submit-button {
+    align-content: center;
+    color: black;
+}
+
+.hidden { display:none; }

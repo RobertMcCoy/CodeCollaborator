@@ -6,6 +6,7 @@ import Collab from './Collab';
 import Register from './Register';
 import LandingPage from './LandingPage';
 import Login from './Login';
+import UsersPage from './UsersPage';
 import { slide as Menu } from 'react-burger-menu';
 
 class App extends Component {
@@ -74,6 +75,7 @@ class App extends Component {
           <Route exact path='/' component={LandingPage} />
           <Route path='/register' component={Register} />
           <Route path='/login' component={Login} />
+          <Route path='/profile' component={UsersPage} />
         </div>
       </Router>
     );
