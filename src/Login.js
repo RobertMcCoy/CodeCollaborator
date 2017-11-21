@@ -35,12 +35,6 @@ class Login extends Component {
                 data: {
                     'username': this.state.user.username,
                     'password': this.state.user.password,
-                },
-                success: function(data) {
-                    console.log("" + data);
-                },
-                error: function(data) {
-                    console.log(data);
                 }
             });
         }
