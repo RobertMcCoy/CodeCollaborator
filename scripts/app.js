@@ -9,12 +9,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('../routes/index');
 const passport = require('passport');
-require('../server/config/passport')(passport);
+var models = require('../server/models');
+require('../server/config/passport')(passport, models.User);
 const uuidv4 = require('uuid/v4');
 const port = process.env.PORT || 3000;
 
-var models = require("../server/models");
-models.sequelize.sync();
+models.User.sequelize.sync();
 
 app.set('port', port);
 app.set('views', path.join(__dirname, '/../views'));
@@ -28,6 +28,12 @@ app.use(helmet());
 app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.use(express.static(path.join(__dirname, "/../build")));
 
