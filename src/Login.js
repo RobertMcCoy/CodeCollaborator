@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
-import $ from 'jquery';
-import validator from 'validator';
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
@@ -21,7 +20,6 @@ class Login extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
         if (this.state.user.username === undefined || this.state.user.password === undefined || this.state.user.username === "" || this.state.user.password === "") {
             this.setState({
                 errors: {
@@ -29,14 +27,23 @@ class Login extends Component {
                 }
             });
         } else {
-            $.ajax({
-                type: 'POST',
-                url: '/auth/login',
-                data: {
+            axios.post('/auth/login', {
                     'username': this.state.user.username,
                     'password': this.state.user.password,
-                }
-            });
+                }).then((response) => {
+                    console.log(response);
+                    if (response.status === 200) {
+                        sessionStorage.setItem('jwtToken', response.data.token);
+                        console.log('Would now be routing you to profile');
+                    }
+                }).catch((response) => {
+                    sessionStorage.setItem('jwtToken', '');
+                    this.setState({
+                        error: {
+                            badLogin: response
+                        }
+                    })
+                });
         }
     }
 

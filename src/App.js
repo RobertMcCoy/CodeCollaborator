@@ -19,7 +19,7 @@ class App extends Component {
       var isEntryIncorrect = true;
       while (isEntryIncorrect) {
         let userName = prompt("What will you be known as on the page?");
-        if (typeof(userName) === "string") {
+        if (typeof (userName) === "string") {
           userName = userName.trim();
           if (userName !== "") {
             localStorage.userName = userName;
@@ -52,18 +52,27 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
-                <Link to='/register'>
-                  <div className="menu-item">Register</div>
-                </Link>
-                <Link to='/login'>
-                  <div className="menu-item">Login</div>
-                </Link>
+                {sessionStorage.getItem('jwtToken') !== undefined && sessionStorage.getItem('jwtToken') !== '' &&
+                  <Link to='/profile'>
+                    <div className="menu-item">Profile</div>
+                  </Link>
+                }
+                {sessionStorage.getItem('jwtToken') === undefined && sessionStorage.getItem('jwtToken') === '' &&
+                  <div>
+                    <Link to='/register'>
+                      <div className="menu-item">Register</div>
+                    </Link>
+                    <Link to='/login'>
+                      <div className="menu-item">Login</div>
+                    </Link>
+                  </div>
+                }
               </div>
             </Menu>
           </div>
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
-          <Route path='/register' component={Register} />
           <Route exact path='/' component={LandingPage} />
+          <Route path='/register' component={Register} />
           <Route path='/login' component={Login} />
         </div>
       </Router>

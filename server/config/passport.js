@@ -1,6 +1,9 @@
+const jwt = require('jsonwebtoken');
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models').User;
 var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function (passport, user) {
     passport.serializeUser(function (user, done) {
@@ -22,6 +25,7 @@ module.exports = function (passport, user) {
 
     passport.use('local-signup', new LocalStrategy(
         {
+            session: false,
             passReqToCallback: true
         },
         function (req, username, password, done) {
@@ -59,10 +63,10 @@ module.exports = function (passport, user) {
     //LOCAL SIGNIN
     passport.use('local-signin', new LocalStrategy(
         {
+            session: false,
             passReqToCallback: true
         },
         function (req, username, password, done) {
-            var User = user;
             var isValidPassword = function (userpass, password) {
                 return bCrypt.compareSync(password, userpass);
             }
@@ -81,4 +85,21 @@ module.exports = function (passport, user) {
             });
         }
     ));
+
+    var jwtOptions = {};
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    jwtOptions.secretOrKey = process.env.JWT_SECRET || 'devsecret';
+    
+    passport.use(new JwtStrategy(jwtOptions, function(jwt_payload, done) {
+      User.findOne({id: jwt_payload.sub}, function(err, user) {
+        if (err) {
+            return done(err, false);
+        }
+        if (user) {
+            done(null, user);
+        } else {
+            done(null, false);
+        }
+      });
+    }));
 }

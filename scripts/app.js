@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var session = require('express-session');
 var path = require('path');
 var helmet = require('helmet');
 var logger = require('morgan');
@@ -25,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
-app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
