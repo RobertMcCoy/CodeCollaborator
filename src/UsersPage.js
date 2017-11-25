@@ -55,6 +55,8 @@ class UsersPage extends Component {
                 <br/>
                 <h3 className="last-login">lastLogin</h3>
                 <br/>
+                <h3 className="last-login">joinDate</h3>
+                <br/>
                 <button className="reset-pass" onClick={this.handleResetPasswordClick}>Reset Password</button>
                 <br/>
                 <br/>
