@@ -27,13 +27,12 @@ class Login extends Component {
                 }
             });
         } else {
-            axios.post('http://localhost:3000/auth/login', {
+            axios.post('/auth/login', {
                     'username': this.state.user.username,
                     'password': this.state.user.password,
                 }).then((response) => {
                     if (response.status === 200) {
                         localStorage.setItem('jwtToken', response.data.token);
-                        console.log('Would now be routing you to profile');
                     }
                 }).catch((response) => {
                     localStorage.setItem('jwtToken', '');

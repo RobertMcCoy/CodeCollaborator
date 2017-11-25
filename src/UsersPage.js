@@ -71,12 +71,11 @@ class UsersPage extends Component {
         if (jwt !== undefined && jwt !== null && jwt !== "") {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
             axios.get('http://localhost:3000/api/profile', { jwt: jwt }).then((response) => {
-                console.log(response);
                 this.setState({
                     user: response.data
                 });
             }).catch((response) => {
-                console.log(response);   
+                //This needs to be displayed to the user as an error if they magically get this far
             });
         }
     };

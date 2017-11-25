@@ -27,7 +27,7 @@ class Register extends Component {
         event.preventDefault();
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/auth/signup',
+            url: '/auth/signup',
             data: { 
                 'username': this.state.user.username, 
                 'email': this.state.user.email, 
