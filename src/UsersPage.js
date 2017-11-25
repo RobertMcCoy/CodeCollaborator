@@ -70,7 +70,7 @@ class UsersPage extends Component {
         var jwt = localStorage.getItem('jwtToken');
         if (jwt !== undefined && jwt !== null && jwt !== "") {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
-            axios.get('http://localhost:3000/api/profile', { jwt: jwt }).then((response) => {
+            axios.get('/api/profile', { jwt: jwt }).then((response) => {
                 this.setState({
                     user: response.data
                 });
