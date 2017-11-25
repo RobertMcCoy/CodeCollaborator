@@ -53,12 +53,12 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
-                {sessionStorage.getItem('jwtToken') !== undefined && sessionStorage.getItem('jwtToken') !== '' &&
+                {localStorage.getItem('jwtToken') !== undefined && localStorage.getItem('jwtToken') !== '' && localStorage.getItem('jwtToken') !== null &&
                   <Link to='/profile'>
                     <div className="menu-item">Profile</div>
                   </Link>
                 }
-                {sessionStorage.getItem('jwtToken') === undefined && sessionStorage.getItem('jwtToken') === '' &&
+                {localStorage.getItem('jwtToken') === undefined || localStorage.getItem('jwtToken') === '' || localStorage.getItem('jwtToken') === null &&
                   <div>
                     <Link to='/register'>
                       <div className="menu-item">Register</div>

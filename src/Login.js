@@ -27,20 +27,19 @@ class Login extends Component {
                 }
             });
         } else {
-            axios.post('/auth/login', {
+            axios.post('http://localhost:3000/auth/login', {
                     'username': this.state.user.username,
                     'password': this.state.user.password,
                 }).then((response) => {
-                    console.log(response);
                     if (response.status === 200) {
-                        sessionStorage.setItem('jwtToken', response.data.token);
+                        localStorage.setItem('jwtToken', response.data.token);
                         console.log('Would now be routing you to profile');
                     }
                 }).catch((response) => {
-                    sessionStorage.setItem('jwtToken', '');
+                    localStorage.setItem('jwtToken', '');
                     this.setState({
-                        error: {
-                            badLogin: response
+                        errors: {
+                            badLogin: "Username/password are incorrect. Please try again."
                         }
                     })
                 });

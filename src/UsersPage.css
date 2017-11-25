@@ -25,8 +25,12 @@
     color: black;
 }
 
-input{
-    color:black;
+h3 {
+    color:#fff;
+}
+
+input {
+    color: black;
 }
 
 .hidden { display:none; }

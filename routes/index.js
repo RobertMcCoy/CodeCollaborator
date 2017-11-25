@@ -15,15 +15,9 @@ router.post('/login', function(req, res, next) {
       return res.json(401, { error: err });
     }
 
-    var userDto = {
-      firstName: user.firstname,
-      lastName: user.lastname,
-      userName: user.username,
-      id: user.id,
-      email: user.email
-    }
+    var payload = { id: user.id };
 
-    var token = jwt.sign(userDto, process.env.JWT_SECRET || 'devsecret', { expiresIn: 60 * 24 * 7 });
+    var token = jwt.sign(payload, process.env.JWT_SECRET || 'devsecret', { expiresIn: 60 * 24 * 7 });
     res.json({ token: token });
    })(req, res, next);
 });

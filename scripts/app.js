@@ -7,13 +7,14 @@ var favicon = require('serve-favicon')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('../routes/index');
+var api = require('../routes/api');
 const passport = require('passport');
 var models = require('../server/models');
 require('../server/config/passport')(passport, models.User);
 const uuidv4 = require('uuid/v4');
 const port = process.env.PORT || 3000;
 
-models.User.sequelize.sync();
+models.Users.sequelize.sync();
 
 app.set('port', port);
 app.set('views', path.join(__dirname, '/../views'));
@@ -29,16 +30,13 @@ app.use(passport.session());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 
 app.use(express.static(path.join(__dirname, "/../build")));
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/../build/index.html'));
-});
-
+app.use('/api', api);
 app.use('/auth', routes);
 
 var server = require('http').createServer(app);
