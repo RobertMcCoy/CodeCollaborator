@@ -28,11 +28,6 @@ module.exports = function (sequelize, Sequelize) {
             type: Sequelize.STRING,
             allowNull: false
         },
-        created_date: {
-            type: Sequelize.DATE,
-            allowNull: false,
-            defaultValue: Sequelize.NOW
-        },
         last_login: {
             type: Sequelize.DATE
         },
