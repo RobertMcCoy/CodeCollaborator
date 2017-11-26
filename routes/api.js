@@ -13,7 +13,7 @@ router.get('/profile', function(req, res, next) {
             }
             else {
                 var userDto = {
-                    createdDate: user.created_date,
+                    createdDate: user.createdAt,
                     email: user.email,
                     firstName: user.firstname,
                     lastName: user.lastName,
