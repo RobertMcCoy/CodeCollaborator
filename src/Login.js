@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
-import $ from 'jquery';
-import validator from 'validator';
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
@@ -15,29 +14,44 @@ class Login extends Component {
             }
         }
 
+        this.handleForm = this.handleForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        //This should validate that the user has entered all information correctloy before firing the submission
-
-        if (event.username.value === "" || event.password.value === "") {
+        if (this.state.user.username === undefined || this.state.user.password === undefined || this.state.user.username === "" || this.state.user.password === "") {
             this.setState({
                 errors: {
                     badLogin: "Must provide username and password"
                 }
             });
         } else {
-            $.ajax({
-                type: 'POST',
-                url: '/auth/login',
-                data: {
+            axios.post('/auth/login', {
                     'username': this.state.user.username,
                     'password': this.state.user.password,
-                },
-            });
+                }).then((response) => {
+                    if (response.status === 200) {
+                        localStorage.setItem('jwtToken', response.data.token);
+                    }
+                }).catch((response) => {
+                    localStorage.setItem('jwtToken', '');
+                    this.setState({
+                        errors: {
+                            badLogin: "Username/password are incorrect. Please try again."
+                        }
+                    })
+                });
         }
+    }
+
+    handleForm(event) {
+        const field = event.target.name;
+        const user = this.state.user;
+        user[field] = event.target.value;
+        this.setState({
+            user
+        });
     }
 
     render() {
@@ -53,6 +67,7 @@ class Login extends Component {
                         <label htmlFor="password">Password*:</label>
                         <input type="password" className="form-control" name="password" onChange={this.handleForm} value={this.state.user.password} />
                     </div>
+                    {this.state.errors.badLogin && <p>*{this.state.errors.badLogin}</p>}
                     <input type="submit" value="Login" className="btn btn-info" />
                 </form>
             </div>

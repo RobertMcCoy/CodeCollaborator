@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var session = require('express-session');
 var path = require('path');
 var helmet = require('helmet');
 var logger = require('morgan');
@@ -8,13 +7,14 @@ var favicon = require('serve-favicon')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('../routes/index');
+var api = require('../routes/api');
 const passport = require('passport');
-require('../server/config/passport')(passport);
+var models = require('../server/models');
+require('../server/config/passport')(passport, models.User);
 const uuidv4 = require('uuid/v4');
 const port = process.env.PORT || 3000;
 
-var models = require("../server/models");
-models.sequelize.sync();
+models.Users.sequelize.sync();
 
 app.set('port', port);
 app.set('views', path.join(__dirname, '/../views'));
@@ -25,16 +25,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
-app.use(session({ secret: (process.env.EXPRESS_SESSION_SECRET || "secret"), saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, "/../build")));
-
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/../build/index.html'));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
 });
 
+app.use(express.static(path.join(__dirname, "/../build")));
+
+app.use('/api', api);
 app.use('/auth', routes);
 
 var server = require('http').createServer(app);

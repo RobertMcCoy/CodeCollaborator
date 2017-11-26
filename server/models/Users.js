@@ -1,7 +1,7 @@
 var bcrypt = require('bcrypt-nodejs');
 
 module.exports = function (sequelize, Sequelize) {
-    var User = sequelize.define('User', {
+    var User = sequelize.define('Users', {
         id: {
             autoIncrement: true,
             primaryKey: true,
@@ -27,6 +27,11 @@ module.exports = function (sequelize, Sequelize) {
         password: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        created_date: {
+            type: Sequelize.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.NOW
         },
         last_login: {
             type: Sequelize.DATE

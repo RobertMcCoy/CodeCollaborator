@@ -25,7 +25,6 @@ class Register extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        //This should validate that the user has entered all information correctloy before firing the submission
         $.ajax({
             type: 'POST',
             url: '/auth/signup',
