@@ -13,6 +13,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.getName = this.getName.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
+  }
+
+  logoutUser() {
+    localStorage.setItem('jwtToken', '');
   }
 
   getName() {
@@ -53,12 +58,17 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
-                {localStorage.getItem('jwtToken') !== undefined && localStorage.getItem('jwtToken') !== '' && localStorage.getItem('jwtToken') !== null &&
-                  <Link to='/profile'>
-                    <div className="menu-item">Profile</div>
-                  </Link>
+                {!localStorage.getItem('jwtToken') && localStorage.getItem('jwtToken') !== '' &&
+                  <div>
+                    <Link to='/profile'>
+                      <div className="menu-item">Profile</div>
+                    </Link>
+                    <a onClick={this.logoutUser}>
+                      <div className="menu-item">Logout</div>
+                    </a>
+                  </div>
                 }
-                {localStorage.getItem('jwtToken') === undefined || localStorage.getItem('jwtToken') === '' || localStorage.getItem('jwtToken') === null &&
+                {localStorage.getItem('jwtToken') === undefined || localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken').trim() === '' &&
                   <div>
                     <Link to='/register'>
                       <div className="menu-item">Register</div>
