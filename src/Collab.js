@@ -10,6 +10,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/xml/xml';
+import Toggle from './Toggle.js';
 
 
 class Collab extends Component {
@@ -85,7 +86,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
-                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} />
+                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} parentHandleChange={this.handleChange} lineWrapping={this.lineWrapping} handleLineWrap={this.handleLineWrap}/>
             </div>
         );
     }
@@ -152,7 +153,7 @@ class Collab extends Component {
         this.addNotificationAlert("Mode has been changed to: " + mode);
     }
 
-    handleLineWrap(size) {
+    handleLineWrap() {
         this.setState({
             options: {lineNumbers: true, mode: this.mode, lineWrapping: true}
         });

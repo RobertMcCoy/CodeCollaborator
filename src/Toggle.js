@@ -4,11 +4,15 @@ import './Toggle.css'
 class Toggle extends React.Component {
     constructor(props){
         super(props);
-        this.state = {toggleState: true};
+        this.state = {toggleState: false};
         this.handleClick = this.handleClick.bind(this);
+        var handleToggle = () => {
+            this.props.handleParentMethod();
+        }
     }
 
     handleClick(){
+        //this.handleToggle();
         this.setState(prevState => ({
             toggleState: !prevState.toggleState
         }));

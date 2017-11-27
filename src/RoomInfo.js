@@ -7,17 +7,24 @@ class RoomInfo extends Component {
 
     constructor(props) {
         super(props);
+
+        var handleToggle = () => {
+            this.props.handleLineWrap();
+        }
+
         this.state = {
             roomId: this.props.roomId,
             collaborators: this.props.collaborators,
             currentMode: this.props.currentMode,
+            lineWrapping: this.props.lineWrapping
         }
     }
 
     componentWillReceiveProps(newProps) {
         this.setState({
             collaborators: newProps.collaborators,
-            currentMode: newProps.currentMode
+            currentMode: newProps.currentMode,
+            lineWrapping: newProps.lineWrapping
         });
     }
 
@@ -33,7 +40,7 @@ class RoomInfo extends Component {
                         <option value="htmlmixed">HTML</option>
                     </select>
                     <button>Confirm Choice</button>
-                    <span className="whiteText">  Text Wrap </span><Toggle/>
+                    <span className="whiteText">Text Wrap</span><Toggle handleClick={this.handleToggle}/>
                 </div>
             </div>
         );
