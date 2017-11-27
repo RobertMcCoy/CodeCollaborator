@@ -3,7 +3,7 @@ import './UsersPage.css'
 import axios from 'axios';
 
 class UsersPage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -20,7 +20,7 @@ class UsersPage extends Component {
     }
 
     handleResetPasswordClick() {
-        if(this.state.hidden == false) {
+        if (this.state.hidden === false) {
             this.setState({
                 hidden: true
             });
@@ -32,33 +32,33 @@ class UsersPage extends Component {
     }
 
     render() {
-        return(
+        return (
             <div className="users-page">
                 <h2 className="name">{this.state.user.firstName} {this.state.user.lastName}</h2>
-                <br/>
+                <br />
                 <h3 className="username">{this.state.user.userName}</h3>
-                <br/>
+                <br />
                 <h3 className="email">{this.state.user.email}</h3>
-                <br/>
+                <br />
                 <h3 className="last-login">{this.state.user.createdDate}</h3>
-                <br/>
+                <br />
                 <button className="reset-pass" onClick={this.handleResetPasswordClick}>Reset Password</button>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <div className={this.state.hidden ? 'hidden' : 'change-pass'}>
                     <form onSubmit={this.handleSubmit}>
                         <label>
-                            Old Password: <input type="password" onChange={this.handleOldPassField}/>
+                            Old Password: <input type="password" onChange={this.handleOldPassField} />
                         </label>
-                        <br/> 
+                        <br />
                         <label>
-                            New Password: <input type="password" onChange={this.handleNewPassField}/>
-                        </label> 
-                        <br/>
+                            New Password: <input type="password" onChange={this.handleNewPassField} />
+                        </label>
+                        <br />
                         <label>
-                            Retype New Password: <input type="password" onChange={this.handleNewPassRepeatedField}/>
-                        </label> 
-                        <br/>
+                            Retype New Password: <input type="password" onChange={this.handleNewPassRepeatedField} />
+                        </label>
+                        <br />
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
@@ -67,8 +67,8 @@ class UsersPage extends Component {
     }
 
     getUserFromServer() {
-        var jwt = localStorage.getItem('jwtToken');
-        if (jwt !== undefined && jwt !== null && jwt !== "") {
+        if (localStorage.getItem('jwtToken')) {
+            var jwt = localStorage.getItem('jwtToken');
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
             axios.get('/api/profile', { jwt: jwt }).then((response) => {
                 this.setState({
