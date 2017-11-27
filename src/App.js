@@ -18,6 +18,7 @@ class App extends Component {
 
   logoutUser() {
     localStorage.setItem('jwtToken', '');
+    this.forceUpdate();
   }
 
   getName() {
