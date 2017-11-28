@@ -37,7 +37,7 @@ class Register extends Component {
                 return false;
             }
         }
-        axios.post('http://localhost:3000/auth/signup', {
+        axios.post('/auth/signup', {
             'username': this.state.user.username,
             'email': this.state.user.email,
             'password': this.state.user.password,
