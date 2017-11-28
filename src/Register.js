@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Register.css';
+import './main.css';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import validator from 'validator';
@@ -98,11 +99,11 @@ class Register extends Component {
                 <div className="container">
                     <form id="signup" name="signup" onSubmit={this.handleSubmit} >
                         <h2>Sign-up for CodeCollaborator</h2>
-                        {this.state.errors.unfilledFields && <p>*{this.state.errors.unfilledFields}</p>}
+                        {this.state.errors.unfilledFields && <p className="code-collab-error">*{this.state.errors.unfilledFields}</p>}
                         <div className="form-group">
                             <label htmlFor="email">Email*:</label>
                             <input type="email" className="form-control" name="email" onChange={this.handleForm} value={this.state.user.email} />
-                            {this.state.errors.emailError && <p>*{this.state.errors.emailError}</p>}
+                            {this.state.errors.emailError && <p className="code-collab-error">*{this.state.errors.emailError}</p>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="firstname">First Name*:</label>
@@ -123,7 +124,7 @@ class Register extends Component {
                         <div className="form-group">
                             <label htmlFor="confirmPassword">Confirm Password*:</label>
                             <input type="password" className="form-control" name="confirmPassword" onChange={this.handleForm} value={this.state.user.confirmPassword} />
-                            {this.state.errors.passwordMismatch && <p>*{this.state.errors.passwordMismatch}</p>}
+                            {this.state.errors.passwordMismatch && <p className="code-collab-error">*{this.state.errors.passwordMismatch}</p>}
                         </div>
                         <input type="submit" value="Register" className="btn btn-info" />
                     </form>

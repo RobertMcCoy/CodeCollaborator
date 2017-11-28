@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
+import './main.css';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 
@@ -77,7 +78,7 @@ class Login extends Component {
                             <label htmlFor="password">Password*:</label>
                             <input type="password" className="form-control" name="password" onChange={this.handleForm} value={this.state.user.password} />
                         </div>
-                        {this.state.errors.badLogin && <p>*{this.state.errors.badLogin}</p>}
+                        {this.state.errors.badLogin && <p className="code-collab-error">*{this.state.errors.badLogin}</p>}
                         <input type="submit" value="Login" className="btn btn-info" />
                     </form>
                 </div>
