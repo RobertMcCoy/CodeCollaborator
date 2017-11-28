@@ -59,7 +59,7 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
-                {localStorage.getItem('jwtToken') && localStorage.getItem('jwtToken').trim() !== '' &&
+                {localStorage.getItem('jwtToken') &&
                   <div>
                     <Link to='/profile'>
                       <div className="menu-item">Profile</div>
@@ -69,7 +69,7 @@ class App extends Component {
                     </a>
                   </div>
                 }
-                {!localStorage.getItem('jwtToken') && localStorage.getItem('jwtToken').trim() === '' &&
+                {!localStorage.getItem('jwtToken') &&
                   <div>
                     <Link to='/register'>
                       <div className="menu-item">Register</div>
