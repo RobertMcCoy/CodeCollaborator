@@ -30,16 +30,24 @@ class Login extends Component {
                 }
             });
         } else {
-            axios.post('/auth/login', {
+            axios.post('http://localhost:3000/auth/login', {
                 'username': this.state.user.username,
                 'password': this.state.user.password,
             }).then((response) => {
                 if (response.status === 200) {
                     localStorage.setItem('jwtToken', response.data.token);
+                    this.setState({
+                        loggedIn: true
+                    });
+                    this.props.handler();
+                } else {
+                    localStorage.setItem('jwtToken', '');
+                    this.setState({
+                        errors: {
+                            badLogin: "There was an error logging you in, please try again."
+                        }
+                    })
                 }
-                this.setState({
-                    loggedIn: true
-                })
             }).catch((response) => {
                 localStorage.setItem('jwtToken', '');
                 this.setState({
