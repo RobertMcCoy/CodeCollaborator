@@ -12,12 +12,18 @@ import { slide as Menu } from 'react-burger-menu';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.handleLogin = this.handleLogin.bind(this);
     this.getName = this.getName.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
   }
 
   logoutUser() {
     localStorage.setItem('jwtToken', '');
+    this.forceUpdate();
+  }
+
+  handleLogin() {
+    this.forceUpdate();
   }
 
   getName() {
@@ -58,7 +64,7 @@ class App extends Component {
                 <Link to='/collab'>
                   <div className="menu-item" onClick={this.getName}>New Collab</div>
                 </Link>
-                {!localStorage.getItem('jwtToken') && localStorage.getItem('jwtToken') !== '' &&
+                {localStorage.getItem('jwtToken') &&
                   <div>
                     <Link to='/profile'>
                       <div className="menu-item">Profile</div>
@@ -68,7 +74,7 @@ class App extends Component {
                     </a>
                   </div>
                 }
-                {localStorage.getItem('jwtToken') === undefined || localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken').trim() === '' &&
+                {!localStorage.getItem('jwtToken') &&
                   <div>
                     <Link to='/register'>
                       <div className="menu-item">Register</div>
@@ -84,7 +90,7 @@ class App extends Component {
           <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
           <Route exact path='/' component={LandingPage} />
           <Route path='/register' component={Register} />
-          <Route path='/login' component={Login} />
+          <Route path='/login' render={(props) => <Login handler={this.handleLogin} />}/>
           <Route path='/profile' component={UsersPage} />
         </div>
       </Router>

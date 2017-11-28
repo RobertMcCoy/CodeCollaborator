@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
+import './main.css';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 
@@ -35,10 +36,18 @@ class Login extends Component {
             }).then((response) => {
                 if (response.status === 200) {
                     localStorage.setItem('jwtToken', response.data.token);
+                    this.setState({
+                        loggedIn: true
+                    });
+                    this.props.handler();
+                } else {
+                    localStorage.setItem('jwtToken', '');
+                    this.setState({
+                        errors: {
+                            badLogin: "There was an error logging you in, please try again."
+                        }
+                    })
                 }
-                this.setState({
-                    loggedIn: true
-                })
             }).catch((response) => {
                 localStorage.setItem('jwtToken', '');
                 this.setState({
@@ -77,7 +86,7 @@ class Login extends Component {
                             <label htmlFor="password">Password*:</label>
                             <input type="password" className="form-control" name="password" onChange={this.handleForm} value={this.state.user.password} />
                         </div>
-                        {this.state.errors.badLogin && <p>*{this.state.errors.badLogin}</p>}
+                        {this.state.errors.badLogin && <p className="code-collab-error">*{this.state.errors.badLogin}</p>}
                         <input type="submit" value="Login" className="btn btn-info" />
                     </form>
                 </div>
