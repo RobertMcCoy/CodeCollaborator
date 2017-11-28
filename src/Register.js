@@ -22,68 +22,114 @@ class Register extends Component {
             registered: false
         }
 
+        this.verifyInput = this.verifyInput.bind(this);
         this.handleForm = this.handleForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        axios.post('/auth/signup', {
-            'username': this.state.user.username,
-            'email': this.state.user.email,
-            'password': this.state.user.password,
-            'firstname': this.state.user.firstname,
-            'lastname': this.state.user.lastname
-        }).then((response) => {
-            if (response.status === 200) {
-                localStorage.setItem('jwtToken', response.data.token);
-            }
-            this.setState({
-                registered: true
-            })
-        }).catch((response) => {
-            localStorage.setItem('jwtToken', '');
+        let isValidUser = true;
+        for (var property in this.state.user) {
+            isValidUser = this.verifyInput(property, this.state.user[property]);
+        }
+        if (isValidUser) {
+            axios.post('/auth/signup', {
+                'username': this.state.user.username,
+                'email': this.state.user.email,
+                'password': this.state.user.password,
+                'firstname': this.state.user.firstname,
+                'lastname': this.state.user.lastname
+            }).then((response) => {
+                if (response.status === 200) {
+                    localStorage.setItem('jwtToken', response.data.token);
+                }
+                this.setState({
+                    registered: true
+                })
+            }).catch((response) => {
+                localStorage.setItem('jwtToken', '');
+                this.setState({
+                    errors: {
+                        badLogin: "Username/password are incorrect. Please try again."
+                    }
+                })
+            });
+        } else {
             this.setState({
                 errors: {
-                    badLogin: "Username/password are incorrect. Please try again."
+                    unfilledFields: "You must fill in all fields!"
                 }
             })
-        });
+        }
     }
 
-    handleForm(event) {
-        const field = event.target.name;
-        const user = this.state.user;
+    verifyInput(field, value) {
         var currentErrors = this.state.errors;
-        user[field] = event.target.value;
         if (field === "email") {
-            if (!validator.isEmail(event.target.value)) {
+            if (!validator.isEmail(value)) {
                 currentErrors.emailError = "Email must be a valid address!";
                 this.setState({
                     errors: currentErrors
-                })
+                });
+                return false;
             }
             else {
                 currentErrors.emailError = "";
                 this.setState({
                     errors: currentErrors
-                })
+                });
+            }
+        }
+        if (field === "username") {
+            if (!value) {
+                currentErrors.userNameError = "Username must be present!";
+                this.setState({
+                    errors: currentErrors
+                });
+                return false;
+            }
+        }
+        if (field === "firstname") {
+            if (!value) {
+                currentErrors.firstNameError = "First Name must be filled in!";
+                this.setState({
+                    errors: currentErrors
+                });
+                return false;
+            }
+        }
+        if (field === "lastname") {
+            if (!value) {
+                currentErrors.lastNameError = "Last Name must be filled in!";
+                this.setState({
+                    errors: currentErrors
+                });
+                return false;
             }
         }
         if (field === "password" || field === "confirmPassword") {
-            if (user.password !== user.confirmPassword) {
+            if (this.state.user.password !== this.state.user.confirmPassword) {
                 currentErrors.passwordMismatch = "Passwords must match!";
                 this.setState({
                     errors: currentErrors
-                })
+                });
+                return false;
             }
             else {
                 currentErrors.passwordMismatch = "";
                 this.setState({
                     errors: currentErrors
-                })
+                });
             }
         }
+    }
+
+    handleForm(event) {
+        const field = event.target.name;
+        const user = this.state.user;
+        user[field] = event.target.value;
+        this.verifyInput(field, event.target.value);
         this.setState({
             user
         });
