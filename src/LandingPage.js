@@ -22,6 +22,8 @@ class LandingPage extends Component {
                 </div>
                 <div className="dev-section">
                     <h3>David</h3>
+                    <img src="dm_profilepicture_close.jpg"/>
+                    <p>Senior at IPFW, enjoys software development and long walks on the beach.</p>
                 </div>
                 <div className="dev-section">
                     <h3>Brad</h3>
