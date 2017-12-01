@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Login.css';
-import $ from 'jquery';
-import validator from 'validator';
+import './main.css';
+import { Redirect } from 'react-router';
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
@@ -12,51 +13,85 @@ class Login extends Component {
             user: {
                 username: '',
                 password: ''
-            }
+            },
+            loggedIn: false
         }
 
+        this.handleForm = this.handleForm.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        //This should validate that the user has entered all information correctloy before firing the submission
-
-        if (event.username.value === "" || event.password.value === "") {
+        if (this.state.user.username === undefined || this.state.user.password === undefined || this.state.user.username === "" || this.state.user.password === "") {
             this.setState({
                 errors: {
                     badLogin: "Must provide username and password"
                 }
             });
         } else {
-            $.ajax({
-                type: 'POST',
-                url: '/auth/login',
-                data: {
-                    'username': this.state.user.username,
-                    'password': this.state.user.password,
-                },
+            axios.post('/auth/login', {
+                'username': this.state.user.username,
+                'password': this.state.user.password,
+            }).then((response) => {
+                if (response.status === 200) {
+                    localStorage.setItem('jwtToken', response.data.token);
+                    this.setState({
+                        loggedIn: true
+                    });
+                    this.props.handler();
+                } else {
+                    localStorage.setItem('jwtToken', '');
+                    this.setState({
+                        errors: {
+                            badLogin: "There was an error logging you in, please try again."
+                        }
+                    })
+                }
+            }).catch((response) => {
+                localStorage.setItem('jwtToken', '');
+                this.setState({
+                    errors: {
+                        badLogin: "Username/password are incorrect. Please try again."
+                    }
+                })
             });
         }
     }
 
+    handleForm(event) {
+        const field = event.target.name;
+        const user = this.state.user;
+        user[field] = event.target.value;
+        this.setState({
+            user
+        });
+    }
+
     render() {
-        return (
-            <div className="container">
-                <form id="login" name="login" onSubmit={this.handleSubmit} >
-                    <h2>Login to CodeCollaborator</h2>
-                    <div className="form-group">
-                        <label htmlFor="username">Username:</label>
-                        <input type="text" className="form-control" name="username" onChange={this.handleForm} value={this.state.user.username} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password*:</label>
-                        <input type="password" className="form-control" name="password" onChange={this.handleForm} value={this.state.user.password} />
-                    </div>
-                    <input type="submit" value="Login" className="btn btn-info" />
-                </form>
-            </div>
-        );
+        if (this.state.loggedIn) {
+            return (
+                <Redirect to='/profile' />
+            )
+        } else {
+            return (
+                <div className="container">
+                    <form id="login" name="login" onSubmit={this.handleSubmit} >
+                        <h2>Login to CodeCollaborator</h2>
+                        <div className="form-group">
+                            <label htmlFor="username">Username:</label>
+                            <input type="text" className="form-control" name="username" onChange={this.handleForm} value={this.state.user.username} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password*:</label>
+                            <input type="password" className="form-control" name="password" onChange={this.handleForm} value={this.state.user.password} />
+                        </div>
+                        {this.state.errors.badLogin && <p className="code-collab-error">*{this.state.errors.badLogin}</p>}
+                        <input type="submit" value="Login" className="btn btn-info" />
+                    </form>
+                </div>
+            );
+        }
     }
 }
 

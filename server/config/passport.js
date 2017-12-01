@@ -1,15 +1,15 @@
-
-//load bcrypt
+const jwt = require('jsonwebtoken');
 var bCrypt = require('bcrypt-nodejs');
-var User = require('../models').User;
+var User = require('../models').Users;
 var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function (passport, user) {
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
-    // used to deserialize the user
     passport.deserializeUser(function (id, done) {
         User.findById(id).then(function (user) {
             if (user) {
@@ -24,6 +24,7 @@ module.exports = function (passport, user) {
 
     passport.use('local-signup', new LocalStrategy(
         {
+            session: false,
             passReqToCallback: true
         },
         function (req, username, password, done) {
@@ -61,10 +62,10 @@ module.exports = function (passport, user) {
     //LOCAL SIGNIN
     passport.use('local-signin', new LocalStrategy(
         {
+            session: false,
             passReqToCallback: true
         },
         function (req, username, password, done) {
-            var User = user;
             var isValidPassword = function (userpass, password) {
                 return bCrypt.compareSync(password, userpass);
             }
@@ -83,4 +84,17 @@ module.exports = function (passport, user) {
             });
         }
     ));
+
+    var jwtOptions = {};
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    jwtOptions.secretOrKey = process.env.JWT_SECRET || 'devsecret';
+
+    passport.use(new JwtStrategy(jwtOptions, function (jwt_payload, done) {
+        User.findOne({ where: { id: jwt_payload.id } }).then(function (user) {
+            if (!user) {
+                return done(null, false, { message: 'Username does not exist' });
+            }
+            done(null, user);
+        });
+    }));
 }

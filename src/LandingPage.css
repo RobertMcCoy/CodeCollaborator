@@ -4,6 +4,7 @@
     float: right;
     width: calc(100% - 60px);
     color: white;
+    overflow-y: scroll;
 }
 
 img {
@@ -90,6 +91,14 @@ h1, h3 {
     text-align: center;
 }
 
+.dev-section p {
+    padding: 15px;
+}
+
+.dev-section img {
+    border-radius:50%;
+}
+
 .bar{
     width:8px;
     margin:1px;
@@ -97,3 +106,6 @@ h1, h3 {
     position:relative;
     vertical-align:baseline;
 }
+
+    
+

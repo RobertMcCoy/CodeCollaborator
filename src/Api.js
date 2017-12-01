@@ -4,7 +4,6 @@ var socket;
 instantiateSocket();
 
 function instantiateSocket() {
-    console.log(window.location.host);
     if (window.location.host === "localhost:3001") {
         socket = io.connect('http://localhost:3000', { 'transports': ['polling'] });
     }
