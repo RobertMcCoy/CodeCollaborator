@@ -27,6 +27,8 @@ class LandingPage extends Component {
                 </div>
                 <div className="dev-section">
                     <h3>Brad</h3>
+                    <p>A senior at IPFW and a Software Engineer for IDEMIA.</p>
+                    
                 </div>
                 
             </div>
