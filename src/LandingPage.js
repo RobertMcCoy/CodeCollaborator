@@ -8,24 +8,24 @@ class LandingPage extends Component {
         super(props);
 
         this.state={
-
+            inputString:''
         }
-        var inputString = '';
     }
 
     render(){
         return(
             <div className="landing-page">
                 <img src="codeCollabBanner.svg" className="banner" alt="CodeCollab Logo"/>
-                <div className="section-info centered">
-                <Link to='/collab'>
-                  <div className="fake-button-green centered" onClick={this.getName}>Start a Collab</div>
-                </Link>
-                <p className='bar'>|</p>
-                <input className='section-info round-input' ref={(input) => {this.inputString=input}} placeholder='Your Collab ID...'/>
-                <Link to={'/collab/'+this.inputString}>
-                    <div className="fake-button-purple centered">Rejoin Collab</div>
-                </Link>
+                <div className="row row-align-center">
+                    <div className="col-md-2"></div>
+                    <Link to='/collab'>
+                        <div className="col-md-2 btn btn-green" onClick={this.getName}>Start a Collab</div>
+                    </Link>
+                    <input className='col-md-3 btn btn-input' ref={(input) => {this.state.inputString=(input)}} placeholder='Your Collab ID...'/>
+                    <Link to={'/collab/'+this.state.inputString}>
+                        <div className="col-md-2 btn btn-purple">Rejoin Collab</div>
+                    </Link>
+                    <div className="col-md-2"></div>
                 </div>
 
                 <h1 className="section-head">About the App</h1>

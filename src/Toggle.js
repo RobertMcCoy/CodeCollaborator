@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Toggle.css';
+import './RoomInfo.css';
 
 class Toggle extends React.Component {
     constructor(props){

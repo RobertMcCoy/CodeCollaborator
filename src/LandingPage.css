@@ -28,61 +28,32 @@ h1, h3 {
     padding-left: 35px;
 }
 
-.round-input{
-    background-color:rgb(196, 197, 201);
-    border:2px solid;
-    color: #6D6E71;
-    padding: 20px;
-    text-align:center;
-    text-decoration:none;
-    display:inline;
-    font-size: 16px;
-    margin: 4px 2px;
-    height:60px;
-    border-radius: 8px;
+.btn-input{
+    background-color:rgb(177, 177, 177);
+    padding:15px;
+    margin:4px;
+    font-size:18pt;   
+    color: rgb(80, 81, 82);
 }
 
-.centered{
-    margin-left: auto;
-    margin-right:auto;
-    text-align:center;
-    width:80%;
-}
-
-.fake-button-green{
+.btn-green{
     background-color: rgb(61, 141, 64);
-    border: none;
+    padding:15px;    
+    margin:4px;
+    font-size:18pt;
     color: white;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline;
-    font-size: 16px;
-    margin: 4px 2px;
-    height:60px;
-    border-radius: 8px;
 }
 
-.fake-button-green:hover{
-    background-color: rgb(52, 121, 54);
-}
-
-.fake-button-purple{
+.btn-purple{
     background-color: rgb(132, 42, 156);
-    border: none;
+    padding:15px;
+    margin:4px;
+    font-size:18pt;    
     color: white;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline;
-    font-size: 16px;
-    margin: 4px 2px;
-    height:60px;
-    border-radius: 8px;
 }
 
-.fake-button-purple:hover{
-    background-color:#68217A
+.row-align-center{
+    margin:0 auto;
 }
 
 .dev-section {
@@ -97,14 +68,6 @@ h1, h3 {
 
 .dev-section img {
     border-radius:50%;
-}
-
-.bar{
-    width:8px;
-    margin:1px;
-    display:inline-block;
-    position:relative;
-    vertical-align:baseline;
 }
 
     
