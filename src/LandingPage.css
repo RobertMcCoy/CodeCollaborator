@@ -31,5 +31,4 @@ h1, h3 {
     width: calc(36% - 60px);
     display: inline-block;
     text-align: center;
-    font-style:italic;
 }
