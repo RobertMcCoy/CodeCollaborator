@@ -158,7 +158,6 @@ class Collab extends Component {
         this.setState({
             options: {lineNumbers: true, mode: this.mode, lineWrapping: true}
         });
-        this.addNotificationAlert("Line-Wrapping has been set to: "+ this.lineWrapping);
     }
 }
 

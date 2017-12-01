@@ -32,15 +32,15 @@ class RoomInfo extends Component {
         return (
             <div className="room-info">
                 <Users collaborators={this.state.collaborators} />
-                <hr />
+                <hr/>
                 <div className="new-selection">
-                    <h1>Current Selection</h1>
+                    <h1 className="whiteText">Current Selection</h1>
                     <select value={this.state.currentMode} onChange={this.props.modeChange}>
                         <option value="javascript">JavaScript</option>
                         <option value="htmlmixed">HTML</option>
                     </select>
                     <button>Confirm Choice</button>
-                    <span className="whiteText">Text Wrap</span><Toggle handleClick={this.handleLineWrap}/>
+                    <text className="whiteText">{"\nText Wrap"}</text><Toggle handleClick={this.handleLineWrap}/>
                 </div>
             </div>
         );

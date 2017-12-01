@@ -8,8 +8,13 @@ class LandingPage extends Component {
         super(props);
 
         this.state={
-            inputString:''
+            inputString:""
         }
+        this.handleInput = this.handleInput.bind(this);
+    }
+
+    handleInput(e){
+        this.setState({inputString: e.target.value});
     }
 
     render(){
@@ -21,7 +26,7 @@ class LandingPage extends Component {
                     <Link to='/collab'>
                         <div className="col-md-2 btn btn-green" onClick={this.getName}>Start a Collab</div>
                     </Link>
-                    <input className='col-md-3 btn btn-input' ref={(input) => {this.state.inputString=(input)}} placeholder='Your Collab ID...'/>
+                    <input className='col-md-3 btn btn-input' onChange={this.handleInput} value={this.state.inputValue} placeholder='Your Collab ID...'/>
                     <Link to={'/collab/'+this.state.inputString}>
                         <div className="col-md-2 btn btn-purple">Rejoin Collab</div>
                     </Link>
