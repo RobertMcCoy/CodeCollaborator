@@ -45,6 +45,7 @@ class Collab extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
+        this.handleLineWrap = this.handleLineWrap.bind(this);
     }
 
     addNotificationAlert(message) {

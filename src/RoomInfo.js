@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import Users from './Users';
 import './RoomInfo.css';
 import Toggle from './Toggle.js';
@@ -8,7 +8,7 @@ class RoomInfo extends Component {
     constructor(props) {
         super(props);
 
-        var handleToggle = () => {
+        var handleLineWrap = () => {
             this.props.handleLineWrap();
         }
 
@@ -40,7 +40,7 @@ class RoomInfo extends Component {
                         <option value="htmlmixed">HTML</option>
                     </select>
                     <button>Confirm Choice</button>
-                    <span className="whiteText">Text Wrap</span><Toggle handleClick={this.handleToggle}/>
+                    <span className="whiteText">Text Wrap</span><Toggle handleClick={this.handleLineWrap}/>
                 </div>
             </div>
         );

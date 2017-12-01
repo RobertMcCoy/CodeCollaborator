@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import './Toggle.css'
+import './Toggle.css';
 
 class Toggle extends React.Component {
     constructor(props){
         super(props);
         this.state = {toggleState: false};
-        this.handleClick = this.handleClick.bind(this);
-        var handleToggle = () => {
-            this.props.handleParentMethod();
+        var handleLineWrap = () => {
+            this.props.handleLineWrap();
         }
+        this.handleClick = this.handleClick.bind(this);        
     }
 
     handleClick(){
-        //this.handleToggle();
+        this.handleLineWrap();
         this.setState(prevState => ({
             toggleState: !prevState.toggleState
         }));
