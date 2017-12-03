@@ -10,18 +10,13 @@
 img {
     display: block;
     margin: 0 auto;
-    max-height: 50%;
-    max-width: 50%;
-}
-
-h1, h3 {
-    text-align: center;
+    max-height: 25%;
+    width: 50%;
 }
 
 .section-head {
     text-align: left;
     padding-left: 25px;
-    text-decoration: underline;
 }
 
 .section-info {
@@ -29,7 +24,6 @@ h1, h3 {
 }
 
 .dev-section {
-    width: calc(36% - 60px);
     display: inline-block;
     text-align: center;
 }
@@ -40,4 +34,13 @@ h1, h3 {
 
     .dev-section img {
         border-radius:50%;
+        height: 25%;
+        width: 25%;
     }
+
+@media(min-width: 992px) {
+    .dev-section img {
+        height: 50%;
+        width: 50%;
+    }
+}

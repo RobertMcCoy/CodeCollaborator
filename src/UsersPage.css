@@ -1,36 +1,21 @@
 .users-page {
-    position: relative;
-    float: right;
     width: calc(100% - 60px);
-    color: white;    
-    text-align: center;
-    
+    color: white;
+    padding: 75px;
 }
 
-.name {
-    height: 100%;
-    font-size: 64px;
-}
-
-.reset-pass {
-    align-content: center;
-    color: black;
-}
-
-.change-pass {
-    text-align: center;
-}
-.submit-button {
-    align-content: center;
-    color: black;
-}
-
-h3 {
-    color:#fff;
-}
-
+.reset-pass,
+.submit-button,
 input {
     color: black;
 }
 
-.hidden { display:none; }
+.hidden { 
+    display: none; 
+}
+
+@media(min-width: 768px) {
+    .users-page {
+        padding: 200px;
+    }
+}
