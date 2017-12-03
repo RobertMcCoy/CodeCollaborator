@@ -6,16 +6,23 @@ class Toggle extends React.Component {
         super(props);
         this.state = {toggleState: false};
         var handleLineWrap = () => {
-            this.props.handleLineWrap();
+            this.props.handleLineWrap;
         }
-        this.handleClick = this.handleClick.bind(this);        
+
+        this.props.lineWrapCallback = () => {
+            this.props.lineWrappingCallbackRoomInfo(this.state.toggleState);
+        }
+
+        this.handleClick = this.handleClick.bind(this);
     }
 
+    
+
     handleClick(){
-        this.handleLineWrap();
         this.setState(prevState => ({
             toggleState: !prevState.toggleState
         }));
+        this.lineWrapCallback();
     }
 
     render(){

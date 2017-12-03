@@ -48,6 +48,10 @@ class Collab extends Component {
         this.handleLineWrap = this.handleLineWrap.bind(this);
     }
 
+    lineWrapCallback = (dataFromChild) => {
+        this.setState({options: {lineWrapping: !this.state.lineWrapping}});
+    }
+
     addNotificationAlert(message) {
         toast(message);
     }
@@ -87,7 +91,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
-                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} parentHandleChange={this.handleChange} lineWrapping={this.lineWrapping} handleLineWrap={this.handleLineWrap}/>
+                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} parentHandleChange={this.handleChange} lineWrapping={this.lineWrapping} handleLineWrap={this.handleLineWrap} lineWrapCallback={this.lineWrapCallback}/>
             </div>
         );
     }
