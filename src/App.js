@@ -25,7 +25,6 @@ class App extends Component {
     this.forceUpdate();
   }
 
-
   render() {
     return (
       <Router>

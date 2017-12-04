@@ -16,7 +16,7 @@ class Collab extends Component {
     constructor(props) {
         super(props);
         let userName;
-        if (!localStorage.getItem('jwtToken')) {
+        if (localStorage.getItem('jwtToken')) {
             var jwt = localStorage.getItem('jwtToken');
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
             axios.get('/api/profile', { jwt: jwt }).then((response) => {
