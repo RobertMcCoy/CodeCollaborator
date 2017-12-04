@@ -62,17 +62,17 @@ class UsersPage extends Component {
                         <br />
                         <div className={this.state.hidden ? 'hidden' : 'change-pass'}>
                             <form onSubmit={this.handleSubmit}>
-                                <div class="form-group">
-                                    <label for="oldPassword">Old Password:</label>
-                                    <input type="password" name="oldPassword" id="oldPassword" class="form-control" onChange={this.handleOldPassField} />
+                                <div className="form-group">
+                                    <label htmlFor="oldPassword">Old Password:</label>
+                                    <input type="password" name="oldPassword" id="oldPassword" className="form-control" onChange={this.handleOldPassField} />
                                 </div>
-                                <div class="form-group">
-                                    <label for="newPassword">New Password:</label>
-                                    <input type="password" name="newPassword" id="newPassword" class="form-control" onChange={this.handleNewPassField} />
+                                <div className="form-group">
+                                    <label htmlFor="newPassword">New Password:</label>
+                                    <input type="password" name="newPassword" id="newPassword" className="form-control" onChange={this.handleNewPassField} />
                                 </div>
-                                <div class="form-group">
-                                    <label for="confirmNew">Retype New Password:</label>
-                                    <input type="password" name="confirmNew" id="confirmNew" class="form-control" onChange={this.handleNewPassRepeatedField} />
+                                <div className="form-group">
+                                    <label htmlFor="confirmNew">Retype New Password:</label>
+                                    <input type="password" name="confirmNew" id="confirmNew" className="form-control" onChange={this.handleNewPassRepeatedField} />
                                 </div>
                                 <input type="submit" class="btn btn-default" value="Submit" />
                             </form>

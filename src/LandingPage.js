@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './LandingPage.css';
 
@@ -9,7 +9,7 @@ const LandingPage = (props) => {
                 <h2 className="section-head">About the App</h2>
                 <p className="section-info">Have you ever wanted to collaboratively code with your peers? Now you can. CodeCollaborator is a React application that utilizes Socket.IO to allow people to collaborate on code from any device.</p>
                 <h2 className="section-head">The Devs</h2>
-                <div class="row">
+                <div className="row">
                     <div className="dev-section col-md-4 col-xs-12">
                         <h3>Robert</h3>
                         <img src="assets/images/rmccoy.jpg" alt="Robert Profile"/>

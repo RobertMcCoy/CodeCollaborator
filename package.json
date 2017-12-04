@@ -133,5 +133,6 @@
   },
   "devDependencies": {
     "pg": "^6.4.2"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }
