@@ -38,8 +38,8 @@ class UsersPage extends Component {
         var cleanDate = new Date(date);
         var year = cleanDate.getFullYear();
         var month = cleanDate.getMonth();
-        var day = cleanDate.getDay();
-        return year + '-' + month + '-' + day;
+        var day = cleanDate.getDate();
+        return month + '/' + day + '/' + year;
     }
 
     render() {
