@@ -11,38 +11,32 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/xml/xml';
 
-
 class Collab extends Component {
     constructor(props) {
         super(props);
         let userName;
-        if (localStorage.userName === undefined && this.props.userName === undefined) {
-            var isEntryIncorrect = true;
-            while (isEntryIncorrect) {
-                userName = prompt("What will you be known as on the page?");
-                if (typeof(userName) === "string") {
-                    userName = userName.trim();
-                    if (userName !== "") {
-                        localStorage.userName = userName;
-                        isEntryIncorrect = false;
-                    }
-                }
-                if (userName == null) {
-                    isEntryIncorrect = false;
-                }
-            }
+        if (!localStorage.getItem('jwtToken')) {
+            var jwt = localStorage.getItem('jwtToken');
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+            axios.get('/api/profile', { jwt: jwt }).then((response) => {
+                userName = response.data;
+            });
+        } else {
+            this.getName();
         }
 
         this.state = {
-            userName: this.props.userName || localStorage.userName || "",
+            userName: userName || localStorage.userName || "",
             roomId: this.props.match.params.room || "",
             code: '',
-            options: {lineNumbers: true, mode: ''},
+            options: { lineNumbers: true, mode: '' },
             collaborators: [],
             componentSocketId: 0,
             editor: null,
         };
+
         this.handleChange = this.handleChange.bind(this);
+        this.getName = this.getName.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
     }
 
@@ -112,7 +106,7 @@ class Collab extends Component {
             this.setState({
                 collaborators: connections.currentConnections,
                 componentSocketId: socketId,
-                options: {lineNumbers: true, mode: connections.currentMode}
+                options: { lineNumbers: true, mode: connections.currentMode }
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
         }
@@ -140,16 +134,36 @@ class Collab extends Component {
 
     handleModeChange(event) {
         this.setState({
-            options: {lineNumbers: true, mode: event.target.value}
+            options: { lineNumbers: true, mode: event.target.value }
         })
         submitModeChange(this.state.roomId, event.target.value);
     }
 
     handleModeUpdate(err, mode) {
         this.setState({
-            options: {lineNumbers: true, mode: mode}
+            options: { lineNumbers: true, mode: mode }
         });
         this.addNotificationAlert("Mode has been changed to: " + mode);
+    }
+
+
+    getName() {
+        if (localStorage.userName === undefined) {
+            var isEntryIncorrect = true;
+            while (isEntryIncorrect) {
+                let userName = prompt("What will you be known as on the page?");
+                if (typeof (userName) === "string") {
+                    userName = userName.trim();
+                    if (userName !== "") {
+                        localStorage.userName = userName;
+                        isEntryIncorrect = false;
+                    }
+                }
+                if (userName == null) {
+                    isEntryIncorrect = false;
+                }
+            }
+        }
     }
 }
 
