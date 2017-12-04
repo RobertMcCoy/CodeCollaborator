@@ -15,19 +15,9 @@ import 'codemirror/mode/xml/xml';
 class Collab extends Component {
     constructor(props) {
         super(props);
-        let userName;
-        if (localStorage.getItem('jwtToken')) {
-            var jwt = localStorage.getItem('jwtToken');
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
-            axios.get('/api/profile', { jwt: jwt }).then((response) => {
-                userName = response.data;
-            });
-        } else {
-            this.getName();
-        }
 
         this.state = {
-            userName: userName || localStorage.userName || "",
+            userName: "",
             roomId: this.props.match.params.room || "",
             code: '',
             options: { lineNumbers: true, mode: '' },
@@ -36,7 +26,26 @@ class Collab extends Component {
             editor: null,
         };
 
+        if (localStorage.getItem('jwtToken')) {
+            var jwt = localStorage.getItem('jwtToken');
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+            axios.get('http://localhost:3000/api/profile', { jwt: jwt })
+                .then((response) => {
+                    this.setState({
+                        userName: response.data.userName
+                    });
+                    this.connect(response.data.userName);
+                }).catch((response) => {
+                    this.getName();
+                    this.connect(localStorage.userName);
+                });
+        } else {
+            this.getName();
+            this.connect(localStorage.userName);
+        }
+
         this.handleChange = this.handleChange.bind(this);
+        this.connect = this.connect.bind(this);
         this.getName = this.getName.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
     }
@@ -65,14 +74,9 @@ class Collab extends Component {
     }
 
     componentDidMount() {
-        subscribeToRoom(this.state.roomId, this.state.userName,
-            (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
-            (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId),
-            (err, mode) => this.handleModeUpdate(err, mode));
         this.setState({
             editor: $('.CodeMirror')[0].CodeMirror
-        })
+        });
     }
 
     render() {
@@ -83,6 +87,14 @@ class Collab extends Component {
                 <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} />
             </div>
         );
+    }
+
+    connect(userNameFromAxios) {
+        subscribeToRoom(this.state.roomId, userNameFromAxios,
+            (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
+            (err, code) => this.handleCodeUpdate(err, code),
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
     }
 
     handleChange(newCode) {
@@ -157,6 +169,9 @@ class Collab extends Component {
                     userName = userName.trim();
                     if (userName !== "") {
                         localStorage.userName = userName;
+                        this.setState({
+                            userName: localStorage.userName
+                        });
                         isEntryIncorrect = false;
                     }
                 }

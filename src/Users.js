@@ -20,7 +20,6 @@ class Users extends Component {
         return (
             <div className="users-container">
                 <h2 className="users-header">Users</h2>
-                <hr/>
                 <ul className="users-list">
                     {this.state.usersList.map(function(user, i){
                         return <li key={ i }>{user.userName}</li>;
