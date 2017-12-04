@@ -8,7 +8,7 @@
     margin-top: 20px;
 }
 
-.new-selection h1 {
+.new-selection .whiteText h1 {
     color:white;
     text-align: center;
 }
@@ -20,4 +20,8 @@
 
 .new-selection button {
     margin-left: 10px;
+}
+
+.whiteText{
+    color:white;
 }

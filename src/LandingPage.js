@@ -8,7 +8,7 @@ class LandingPage extends Component {
         super(props);
 
         this.state = {
-            inputString: ""
+           inputString: ""
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -58,7 +58,6 @@ class LandingPage extends Component {
                         <p>A senior at IPFW and a Software Engineer for IDEMIA.</p>
                     </div>
                 </div>
-
             </div>
         );
     }
