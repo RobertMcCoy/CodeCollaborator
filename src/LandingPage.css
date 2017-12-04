@@ -23,6 +23,34 @@ img {
     padding-left: 35px;
 }
 
+.btn-input{
+    background-color:rgb(177, 177, 177);
+    padding:15px;
+    margin:4px;
+    font-size:18pt;   
+    color: rgb(80, 81, 82);
+}
+
+.btn-green{
+    background-color: rgb(61, 141, 64);
+    padding:15px;    
+    margin:4px;
+    font-size:18pt;
+    color: white;
+}
+
+.btn-purple{
+    background-color: rgb(132, 42, 156);
+    padding:15px;
+    margin:4px;
+    font-size:18pt;    
+    color: white;
+}
+
+.row-align-center{
+    margin:0 auto;
+}
+
 .dev-section {
     display: inline-block;
     text-align: center;

@@ -1,11 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { BrowserRouter as Link } from 'react-router-dom';
+
 import './LandingPage.css';
 
-const LandingPage = (props) => {
-        return (
+class LandingPage extends Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            inputString: ""
+        }
+        
+        this.handleInput = this.handleInput.bind(this);
+    }
+
+    handleInput(e){
+        this.setState({
+            inputString: e.target.value
+        });
+    }
+
+    render(){
+        return(
             <div className="landing-page">
-                <img src={logo} className="banner" alt="CodeCollab Logo" />
+                <img src="codeCollabBanner.svg" className="banner" alt="CodeCollab Logo"/>
+                <div className="row row-align-center">
+                    <div className="col-md-2"></div>
+                    <Link to='/collab'>
+                        <div className="col-md-2 btn btn-green" onClick={this.getName}>Start a Collab</div>
+                    </Link>
+                    <input className='col-md-3 btn btn-input' onChange={this.handleInput} value={this.state.inputValue} placeholder='Your Collab ID...'/>
+                    <Link to={'/collab/'+this.state.inputString}>
+                        <div className="col-md-2 btn btn-purple">Rejoin Collab</div>
+                    </Link>
+                    <div className="col-md-2"></div>
+                </div>
+
                 <h2 className="section-head">About the App</h2>
                 <p className="section-info">Have you ever wanted to collaboratively code with your peers? Now you can. CodeCollaborator is a React application that utilizes Socket.IO to allow people to collaborate on code from any device.</p>
                 <h2 className="section-head">The Devs</h2>
@@ -25,9 +55,9 @@ const LandingPage = (props) => {
                         <p>A senior at IPFW and a Software Engineer for IDEMIA.</p>
                     </div>
                 </div>
-
             </div>
         );
+    }
 }
 
 export default LandingPage;
