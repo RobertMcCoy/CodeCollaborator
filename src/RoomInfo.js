@@ -8,26 +8,12 @@ class RoomInfo extends Component {
     constructor(props) {
         super(props);
 
-        var handleLineWrap = () => {
-            this.props.handleLineWrap();
-        }
-
         this.state = {
             roomId: this.props.roomId,
             collaborators: this.props.collaborators,
             currentMode: this.props.currentMode,
             lineWrapping: this.props.lineWrapping
         }
-
-        var lineWrappingCallback = () => {
-            this.props.lineWrappingCallback(this.state.lineWrapping);
-        }
-
-        this.lineWrappingCallbackRoomInfo = this.lineWrappingCallbackRoomInfo.bind(this);
-    }
-
-    lineWrappingCallbackRoomInfo = (dataFromChild) => {
-        this.setState({lineWrapping: !this.state.lineWrapping});
     }
 
     componentWillReceiveProps(newProps) {
@@ -50,7 +36,9 @@ class RoomInfo extends Component {
                         <option value="htmlmixed">HTML</option>
                     </select>
                     <button>Confirm Choice</button>
-                    <text className="whiteText">{"\nText Wrap"}</text><Toggle lineWrappingCallbackRoomInfo={this.lineWrappingCallback} handleLineWrap={this.handleLineWrap}/>
+                    <hr />
+                    <div className="whiteText">Text Wrap</div>
+                    <Toggle lineWrapCallback={this.props.lineWrapCallback} />
                 </div>
             </div>
         );

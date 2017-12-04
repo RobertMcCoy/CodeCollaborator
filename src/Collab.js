@@ -11,7 +11,6 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/xml/xml';
-import Toggle from './Toggle.js';
 
 class Collab extends Component {
     constructor(props) {
@@ -21,7 +20,11 @@ class Collab extends Component {
             userName: "",
             roomId: this.props.match.params.room || "",
             code: '',
-            options: {lineNumbers: true, mode: '', lineWrapping: false},
+            options: {
+                lineNumbers: true, 
+                mode: '', 
+                lineWrapping: false
+            },
             collaborators: [],
             componentSocketId: 0,
             editor: null,
@@ -47,13 +50,15 @@ class Collab extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.connect = this.connect.bind(this);
+        this.lineWrapCallback = this.lineWrapCallback.bind(this);
         this.getName = this.getName.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
-        this.handleLineWrap = this.handleLineWrap.bind(this);
     }
 
-    lineWrapCallback = (dataFromChild) => {
-        this.setState({options: {lineWrapping: !this.state.lineWrapping}});
+    lineWrapCallback() {
+        this.setState({
+            options: {lineNumbers: true, mode: this.state.mode, lineWrapping: !this.state.options.lineWrapping}
+        });
     }
 
     addNotificationAlert(message) {
@@ -90,7 +95,7 @@ class Collab extends Component {
             <div className="collab-container">
                 <ToastContainer />
                 <CodeMirror id="codeSpace" value={this.state.code} options={this.state.options} onChange={this.handleChange} />
-                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} parentHandleChange={this.handleChange} lineWrapping={this.lineWrapping} handleLineWrap={this.handleLineWrap} lineWrapCallback={this.lineWrapCallback}/>
+                <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} lineWrapCallback={this.lineWrapCallback}/>
             </div>
         );
     }
@@ -163,12 +168,6 @@ class Collab extends Component {
             options: { lineNumbers: true, mode: mode }
         });
         this.addNotificationAlert("Mode has been changed to: " + mode);
-    }
-
-    handleLineWrap() {
-        this.setState({
-            options: {lineNumbers: true, mode: this.mode, lineWrapping: true}
-        });
     }
 
     getName() {

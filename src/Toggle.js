@@ -1,31 +1,23 @@
 import React, { Component } from 'react';
 import './RoomInfo.css';
 
-class Toggle extends React.Component {
+class Toggle extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             toggleState: false
         };
-        
-        var handleLineWrap = () => {
-            this.props.handleLineWrap;
-        }
-
-        this.props.lineWrapCallback = () => {
-            this.props.lineWrappingCallbackRoomInfo(this.state.toggleState);
-        }
 
         this.handleClick = this.handleClick.bind(this);
     }
-
-
 
     handleClick() {
         this.setState(prevState => ({
             toggleState: !prevState.toggleState
         }));
-        this.lineWrapCallback();
+
+        this.props.lineWrapCallback();
     }
 
     render() {
@@ -35,7 +27,6 @@ class Toggle extends React.Component {
             </button>
         )
     }
-
 }
 
 export default Toggle;
