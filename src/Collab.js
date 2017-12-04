@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
+import axios from 'axios';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom, submitModeChange } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
 import RoomInfo from './RoomInfo';
