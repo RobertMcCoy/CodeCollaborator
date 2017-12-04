@@ -13,7 +13,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
-    this.getName = this.getName.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
   }
 
@@ -24,25 +23,6 @@ class App extends Component {
 
   handleLogin() {
     this.forceUpdate();
-  }
-
-  getName() {
-    if (localStorage.userName === undefined) {
-      var isEntryIncorrect = true;
-      while (isEntryIncorrect) {
-        let userName = prompt("What will you be known as on the page?");
-        if (typeof (userName) === "string") {
-          userName = userName.trim();
-          if (userName !== "") {
-            localStorage.userName = userName;
-            isEntryIncorrect = false;
-          }
-        }
-        if (userName == null) {
-          isEntryIncorrect = false;
-        }
-      }
-    }
   }
 
   render() {
@@ -87,7 +67,7 @@ class App extends Component {
               </div>
             </Menu>
           </div>
-          <Route path='/collab/:room?' render={(props) => (<Collab {...props} userName={localStorage.userName} />)} />
+          <Route path='/collab/:room?' render={(props) => (<Collab {...props} />)} />
           <Route exact path='/' component={LandingPage} />
           <Route path='/register' component={Register} />
           <Route path='/login' render={(props) => <Login handler={this.handleLogin} />}/>

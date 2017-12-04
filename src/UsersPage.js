@@ -14,6 +14,7 @@ class UsersPage extends Component {
         }
 
         this.getUserFromServer = this.getUserFromServer.bind(this);
+        this.formatDate = this.formatDate.bind(this);
         this.handleResetPasswordClick = this.handleResetPasswordClick.bind(this);
     }
 
@@ -33,6 +34,14 @@ class UsersPage extends Component {
         }
     }
 
+    formatDate(date) {
+        var cleanDate = new Date(date);
+        var year = cleanDate.getFullYear();
+        var month = cleanDate.getMonth();
+        var day = cleanDate.getDate();
+        return month + '/' + day + '/' + year;
+    }
+
     render() {
         if (this.state.errors) {
             return (
@@ -40,34 +49,34 @@ class UsersPage extends Component {
             )
         } else {
             return (
-                <div className="users-page">
-                    <h2 className="name">{this.state.user.firstName} {this.state.user.lastName}</h2>
-                    <br />
-                    <h3 className="username">{this.state.user.userName}</h3>
-                    <br />
-                    <h3 className="email">{this.state.user.email}</h3>
-                    <br />
-                    <h3 className="last-login">{this.state.user.createdDate}</h3>
-                    <br />
-                    <button className="reset-pass" onClick={this.handleResetPasswordClick}>Reset Password</button>
-                    <br />
-                    <br />
-                    <div className={this.state.hidden ? 'hidden' : 'change-pass'}>
-                        <form onSubmit={this.handleSubmit}>
-                            <label>
-                                Old Password: <input type="password" onChange={this.handleOldPassField} />
-                            </label>
-                            <br />
-                            <label>
-                                New Password: <input type="password" onChange={this.handleNewPassField} />
-                            </label>
-                            <br />
-                            <label>
-                                Retype New Password: <input type="password" onChange={this.handleNewPassRepeatedField} />
-                            </label>
-                            <br />
-                            <input type="submit" value="Submit" />
-                        </form>
+                <div class="row">
+                    <div className="users-page col-md-12">
+                        <h2>Account Control Panel</h2>
+                        <div>Name: {this.state.user.firstName} {this.state.user.lastName}</div>
+                        <div>Username: {this.state.user.userName}</div>
+                        <div>Email: {this.state.user.email}</div>
+                        <div>Join Date: {this.formatDate(this.state.user.createdDate)}</div>
+                        <br />
+                        <button className="reset-pass btn btn-default" onClick={this.handleResetPasswordClick}>Click to Reset Password</button>
+                        <br />
+                        <br />
+                        <div className={this.state.hidden ? 'hidden' : 'change-pass'}>
+                            <form onSubmit={this.handleSubmit}>
+                                <div className="form-group">
+                                    <label htmlFor="oldPassword">Old Password:</label>
+                                    <input type="password" name="oldPassword" id="oldPassword" className="form-control" onChange={this.handleOldPassField} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="newPassword">New Password:</label>
+                                    <input type="password" name="newPassword" id="newPassword" className="form-control" onChange={this.handleNewPassField} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="confirmNew">Retype New Password:</label>
+                                    <input type="password" name="confirmNew" id="confirmNew" className="form-control" onChange={this.handleNewPassRepeatedField} />
+                                </div>
+                                <input type="submit" class="btn btn-default" value="Submit" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             );

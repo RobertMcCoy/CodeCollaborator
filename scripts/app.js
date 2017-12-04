@@ -39,6 +39,10 @@ app.use(express.static(path.join(__dirname, "/../build")));
 app.use('/api', api);
 app.use('/auth', routes);
 
+app.get('*', function(req, res) {
+	res.sendFile(path.join(__dirname, '/../build/index.html'));
+});
+
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 

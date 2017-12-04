@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Collab.css';
 import $ from 'jquery';
+import axios from 'axios';
 import { subscribeToRoom, submitCodeUpdate, leaveExistingLastRoom, submitModeChange } from './Api';
 import { ToastContainer, toast } from 'react-toastify';
 import RoomInfo from './RoomInfo';
@@ -12,30 +13,12 @@ import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/xml/xml';
 import Toggle from './Toggle.js';
 
-
 class Collab extends Component {
     constructor(props) {
         super(props);
-        let userName;
-        if (localStorage.userName === undefined && this.props.userName === undefined) {
-            var isEntryIncorrect = true;
-            while (isEntryIncorrect) {
-                userName = prompt("What will you be known as on the page?");
-                if (typeof(userName) === "string") {
-                    userName = userName.trim();
-                    if (userName !== "") {
-                        localStorage.userName = userName;
-                        isEntryIncorrect = false;
-                    }
-                }
-                if (userName == null) {
-                    isEntryIncorrect = false;
-                }
-            }
-        }
 
         this.state = {
-            userName: this.props.userName || localStorage.userName || "",
+            userName: "",
             roomId: this.props.match.params.room || "",
             code: '',
             options: {lineNumbers: true, mode: '', lineWrapping: false},
@@ -43,7 +26,28 @@ class Collab extends Component {
             componentSocketId: 0,
             editor: null,
         };
+
+        if (localStorage.getItem('jwtToken')) {
+            var jwt = localStorage.getItem('jwtToken');
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+            axios.get('/api/profile', { jwt: jwt })
+                .then((response) => {
+                    this.setState({
+                        userName: response.data.userName
+                    });
+                    this.connect(response.data.userName);
+                }).catch((response) => {
+                    this.getName();
+                    this.connect(localStorage.userName);
+                });
+        } else {
+            this.getName();
+            this.connect(localStorage.userName);
+        }
+
         this.handleChange = this.handleChange.bind(this);
+        this.connect = this.connect.bind(this);
+        this.getName = this.getName.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
         this.handleLineWrap = this.handleLineWrap.bind(this);
     }
@@ -76,14 +80,9 @@ class Collab extends Component {
     }
 
     componentDidMount() {
-        subscribeToRoom(this.state.roomId, this.state.userName,
-            (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
-            (err, code) => this.handleCodeUpdate(err, code),
-            (err, socketId) => this.handleDisconnectingUser(err, socketId),
-            (err, mode) => this.handleModeUpdate(err, mode));
         this.setState({
             editor: $('.CodeMirror')[0].CodeMirror
-        })
+        });
     }
 
     render() {
@@ -94,6 +93,14 @@ class Collab extends Component {
                 <RoomInfo roomId={this.state.roomId} collaborators={this.state.collaborators} currentMode={this.state.options.mode} modeChange={this.handleModeChange} parentHandleChange={this.handleChange} lineWrapping={this.lineWrapping} handleLineWrap={this.handleLineWrap} lineWrapCallback={this.lineWrapCallback}/>
             </div>
         );
+    }
+
+    connect(userNameFromAxios) {
+        subscribeToRoom(this.state.roomId, userNameFromAxios,
+            (err, roomId, userName, socketId, connections) => this.handleConnections(err, roomId, userName, socketId, connections),
+            (err, code) => this.handleCodeUpdate(err, code),
+            (err, socketId) => this.handleDisconnectingUser(err, socketId),
+            (err, mode) => this.handleModeUpdate(err, mode));
     }
 
     handleChange(newCode) {
@@ -118,7 +125,7 @@ class Collab extends Component {
             this.setState({
                 collaborators: connections.currentConnections,
                 componentSocketId: socketId,
-                options: {lineNumbers: true, mode: connections.currentMode}
+                options: { lineNumbers: true, mode: connections.currentMode }
             });
             this.addNotificationAlert("You joined the page! You are known as: " + userName);
         }
@@ -146,14 +153,14 @@ class Collab extends Component {
 
     handleModeChange(event) {
         this.setState({
-            options: {lineNumbers: true, mode: event.target.value}
+            options: { lineNumbers: true, mode: event.target.value }
         })
         submitModeChange(this.state.roomId, event.target.value);
     }
 
     handleModeUpdate(err, mode) {
         this.setState({
-            options: {lineNumbers: true, mode: mode}
+            options: { lineNumbers: true, mode: mode }
         });
         this.addNotificationAlert("Mode has been changed to: " + mode);
     }
@@ -162,6 +169,28 @@ class Collab extends Component {
         this.setState({
             options: {lineNumbers: true, mode: this.mode, lineWrapping: true}
         });
+    }
+
+    getName() {
+        if (localStorage.userName === undefined) {
+            var isEntryIncorrect = true;
+            while (isEntryIncorrect) {
+                let userName = prompt("What will you be known as on the page?");
+                if (typeof (userName) === "string") {
+                    userName = userName.trim();
+                    if (userName !== "") {
+                        localStorage.userName = userName;
+                        this.setState({
+                            userName: localStorage.userName
+                        });
+                        isEntryIncorrect = false;
+                    }
+                }
+                if (userName == null) {
+                    isEntryIncorrect = false;
+                }
+            }
+        }
     }
 }
 
