@@ -29,7 +29,7 @@ class Collab extends Component {
         if (localStorage.getItem('jwtToken')) {
             var jwt = localStorage.getItem('jwtToken');
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
-            axios.get('http://localhost:3000/api/profile', { jwt: jwt })
+            axios.get('/api/profile', { jwt: jwt })
                 .then((response) => {
                     this.setState({
                         userName: response.data.userName
