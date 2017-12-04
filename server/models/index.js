@@ -35,4 +35,7 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// User.belongsToMany(Collab, { through: CollabUser });
+// Collab.belongsToMany(User, { through: CollabUser });
+
 module.exports = db;

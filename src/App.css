@@ -27,18 +27,13 @@ body {
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 60s linear;
   height: 80px;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 /* End of default styling properties */
 .app-header h2 {
   padding-bottom: 15px;
+  text-align: center;
   color: #fff;
   text-decoration: none;
   border-bottom: 2px solid #fff;
